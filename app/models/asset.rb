@@ -1,0 +1,2 @@
+class Asset < Ledger
+end

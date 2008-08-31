@@ -1,0 +1,2 @@
+class Liability < Ledger
+end
