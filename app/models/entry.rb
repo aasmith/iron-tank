@@ -8,13 +8,21 @@ class Entry < ActiveRecord::Base
   validate :credits_and_debits_of_same_type
 
   def transfer?
-
+    debit_ledger_type == credit_ledger_type
   end
 
   def income?
+    credit_ledger_type == Asset && debit_ledger_type == Liability
   end
 
   def expense?
+    credit_ledger_type == Liability && debit_ledger_type == Asset
+  end
+
+  def entry_type
+    [:transfer, :income, :expense].each do |t|
+      break t if send("#{t}?")
+    end
   end
 
   def debits
@@ -23,6 +31,14 @@ class Entry < ActiveRecord::Base
 
   def credits
     splits.select{|s| s.amount > 0 }
+  end
+
+  def debit_ledger_type
+    debits.first.ledger.class
+  end
+
+  def credit_ledger_type
+    credits.first.ledger.class
   end
 
   protected

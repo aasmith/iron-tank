@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  entry_id: 1
+  ledger_id: 1
+  amount: 1
+
+two:
+  entry_id: 1
+  ledger_id: 1
+  amount: 1
