@@ -5,22 +5,26 @@ class Entry < ActiveRecord::Base
   validate :has_only_one_opposite_signed_split
   validate :has_two_or_more_splits
   validate :has_no_zero_value_splits
-  validate :credits_and_debits_of_same_type
+  validate :has_at_least_one_account_type_split
+
+  def refund?
+    debit?(Expense) && credit?(Account)
+  end
 
   def transfer?
-    debit_ledger_type == credit_ledger_type
+    debit?(Account) && credit?(Account)
   end
 
   def income?
-    credit_ledger_type == Asset && debit_ledger_type == Liability
+    debit?(Category) && credit?(Account)
   end
 
   def expense?
-    credit_ledger_type == Liability && debit_ledger_type == Asset
+    debit?(Account) && credit?(Category)
   end
 
   def entry_type
-    [:transfer, :income, :expense].each do |t|
+    [:transfer, :income, :expense, :refund].each do |t|
       break t if send("#{t}?")
     end
   end
@@ -41,6 +45,14 @@ class Entry < ActiveRecord::Base
     credits.first.ledger.class
   end
 
+  def debit?(type)
+    debit_ledger_type == type
+  end
+
+  def credit?(type)
+    credit_ledger_type == type
+  end
+
   protected
 
   def splits_total_zero?
@@ -55,17 +67,14 @@ class Entry < ActiveRecord::Base
     splits.select{|s| s.amount.zero? }.size > 0
   end
 
-  def credits_and_debits_match_type?
-    [credits, debits].all? do |splits|
-      splits.collect(&:ledger).collect(&:class).uniq.size == 1
-    end
+  def has_account_split?
+    splits.any?{|s| s.ledger === Account }
   end
 
   # Validation calls
   
-  def credits_and_debits_of_same_type
-    errors.add("Credits and Debits must be from the same ledger type") unless
-      credits_and_debits_match_type?
+  def has_at_least_one_account_type_split
+    errors.add("Must have at least one account") unless has_account_split?
   end
 
   def has_no_zero_value_splits
