@@ -54,13 +54,15 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "entries categorized as expenses" do
-    e = Entry.new
-    e.splits << Split.new(:amount => -100, :ledger => Account.new)
-    e.splits << Split.new(:amount =>  100, :ledger => Category.new)
-    assert e.valid?
+    [Category, Expense].each do |c|
+      e = Entry.new
+      e.splits << Split.new(:amount => -100, :ledger => Account.new)
+      e.splits << Split.new(:amount =>  100, :ledger => c.new)
+      assert e.valid?
 
-    assert e.expense?
-    assert e.entry_type == :expense
+      assert e.expense?
+      assert e.entry_type == :expense
+    end
   end
 
   test "entries categorized as incomes" do

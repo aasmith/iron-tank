@@ -8,7 +8,7 @@ class Entry < ActiveRecord::Base
   validate :has_at_least_one_account_type_split
 
   def refund?
-    debit?(Expense) && credit?(Account)
+    debit_ledger.class == Expense && credit?(Account)
   end
 
   def transfer?
@@ -16,7 +16,7 @@ class Entry < ActiveRecord::Base
   end
 
   def income?
-    debit?(Category) && credit?(Account)
+    debit_ledger.class == Category && credit?(Account)
   end
 
   def expense?
@@ -37,20 +37,20 @@ class Entry < ActiveRecord::Base
     splits.select{|s| s.amount > 0 }
   end
 
-  def debit_ledger_type
-    debits.first.ledger.class
+  def debit_ledger
+    debits.first.ledger
   end
 
-  def credit_ledger_type
-    credits.first.ledger.class
+  def credit_ledger
+    credits.first.ledger
   end
 
   def debit?(type)
-    debit_ledger_type == type
+    debit_ledger.is_a? type
   end
 
   def credit?(type)
-    credit_ledger_type == type
+    credit_ledger.is_a? type
   end
 
   protected
