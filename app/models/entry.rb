@@ -30,11 +30,11 @@ class Entry < ActiveRecord::Base
   end
 
   def debits
-    splits.select{|s| s.amount < 0 }
+    splits.select{|s| s.amount.cents < 0 }
   end
 
   def credits
-    splits.select{|s| s.amount > 0 }
+    splits.select{|s| s.amount.cents > 0 }
   end
 
   def debit_ledger
