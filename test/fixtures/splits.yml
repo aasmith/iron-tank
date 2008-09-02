@@ -1,11 +1,52 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+weekly_grocery_debit:
+  entry: weekly_grocery
+  ledger: credit_card
+  amount: -1288
+  fit: cc1
+weekly_grocery_credit:
+  entry: weekly_grocery
+  ledger: groceries
+  amount: 1288
 
-one:
-  entry_id: 1
-  ledger_id: 1
-  amount: 1
+payday_debit:
+  entry: payday
+  ledger: salary
+  amount: -157600
+payday_credit:
+  entry: payday
+  ledger: checking
+  amount: 157600
+  fit: chk1
 
-two:
-  entry_id: 1
-  ledger_id: 1
-  amount: 1
+rainy_day_debit:
+  entry: rainy_day
+  ledger: checking
+  amount: -25000
+  fit: chk2
+rainy_day_credit:
+  entry: rainy_day
+  ledger: savings
+  amount: 25000
+  fit: sav1
+
+pay_cc_debit:
+  entry: pay_cc
+  ledger: checking
+  amount: -568
+  fit: chk3
+pay_cc_credit:
+  entry: pay_cc
+  ledger: credit_card
+  amount: 568
+  fit: cc2
+
+refund_debit:
+  entry: refund
+  ledger: groceries
+  amount: -100
+refund_credit:
+  entry: refund
+  ledger: credit_card
+  amount: 100
+  fit: cc3
+

@@ -4,6 +4,13 @@ class CreateLedgers < ActiveRecord::Migration
       t.string :type
       t.string :name
 
+      t.integer :user_id
+
+      # OFX fields: financial institute id, acct num, routing num
+      t.string :fid
+      t.string :account_number
+      t.string :routing_number
+
       t.timestamps
     end
   end

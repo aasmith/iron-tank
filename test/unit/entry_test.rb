@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class EntryTest < ActiveSupport::TestCase
+  test "fixtures valid" do
+    assert Entry.all.all?(&:valid?)
+  end
+
   test "sum of all splits must equal zero" do
     e = Entry.new
     e.splits << Split.new(:amount => 100, :ledger => Account.new)

@@ -2,4 +2,5 @@
 # or a grouping, such as a category.
 class Ledger < ActiveRecord::Base
   has_many :splits
+  belongs_to :user
 end

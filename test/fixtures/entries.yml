@@ -1,7 +1,10 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  memo: MyString
-
-two:
-  memo: MyString
+weekly_grocery:
+  memo: $LABEL
+payday:
+  memo: $LABEL
+rainy_day:
+  memo: $LABEL
+pay_cc:
+  memo: $LABEL
+refund:
+  memo: $LABEL

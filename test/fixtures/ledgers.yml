@@ -1,9 +1,28 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  type: MyString
-  name: MyString
-
-two:
-  type: MyString
-  name: MyString
+checking:
+  type: Account
+  name: $LABEL
+  user: andy
+  fid: 123
+  account_number: 0123456
+  routing_number: 003300
+savings:
+  type: Account
+  name: $LABEL
+  user: andy
+  fid: 456
+  account_number: 0123456789
+  routing_number: 004400
+credit_card:
+  type: Account
+  name: $LABEL
+  user: andy
+  fid: 789
+  account_number: 4111111111111111
+groceries:
+  type: Expense
+  name: $LABEL
+  user: andy
+salary:
+  type: Category
+  name: $LABEL
+  user: andy

@@ -4,5 +4,5 @@ class Split < ActiveRecord::Base
 
   composed_of(:amount, 
     :class_name => "Money", 
-    :mapping => %w(cents cents)) {|amt| amt.to_money}
+    :mapping => %w(amount cents)) {|amt| amt.to_money}
 end
