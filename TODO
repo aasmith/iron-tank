@@ -1,0 +1,2 @@
+remove accounts() from ofx-parser, and add account().
+spec says there should only ever be one account.

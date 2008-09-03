@@ -3,4 +3,8 @@
 class Ledger < ActiveRecord::Base
   has_many :splits
   belongs_to :user
+
+  def balance
+    Money.new(splits.sum(:amount))
+  end
 end

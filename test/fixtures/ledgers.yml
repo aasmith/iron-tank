@@ -17,7 +17,7 @@ credit_card:
   name: $LABEL
   user: andy
   fid: 789
-  account_number: 4111111111111111
+  account_number: XXXXXXXXXXXX1111
 groceries:
   type: Expense
   name: $LABEL
