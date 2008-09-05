@@ -2,6 +2,8 @@
 # or a grouping, such as a category.
 class Ledger < ActiveRecord::Base
   has_many :splits
+  has_many :entries, :through => :splits
+  has_many :mappings
   belongs_to :user
 
   def balance

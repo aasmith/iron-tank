@@ -99,4 +99,6 @@ class EntryTest < ActiveSupport::TestCase
     assert e.entry_type == :refund
   end
 
+  test "finds dopplegangers given an existing transfer" do
+  end
 end

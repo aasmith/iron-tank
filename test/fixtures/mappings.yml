@@ -1,0 +1,12 @@
+bobs_the_grocer:
+  ledger: groceries
+  condition: equals
+  value: BOB THE GROC WA98101
+albertways:
+  ledger: groceries
+  condition: begins
+  value: ALBERTWAY
+acme:
+  ledger: salary
+  condition: contains
+  value: ACME INC

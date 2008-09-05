@@ -68,3 +68,4 @@ Rails::Initializer.run do |config|
 end
 
 require 'vendor/ofx-parser/lib/ofx-parser'
+require 'lib/core_ext'

@@ -7,6 +7,11 @@ class Entry < ActiveRecord::Base
   validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
 
+  def doppleganger
+    return nil unless transfer?
+    # more here...
+  end
+
   def refund?
     debit_ledger.class == Expense && credit?(Account)
   end
