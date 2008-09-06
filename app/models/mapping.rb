@@ -6,6 +6,7 @@ class Mapping < ActiveRecord::Base
   belongs_to :ledger
 
   def match?(str)
+    return if str.blank?
     equals?(str) || begins?(str) || contains?(str)
   end
 

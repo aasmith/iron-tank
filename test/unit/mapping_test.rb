@@ -16,4 +16,9 @@ class MappingTest < ActiveSupport::TestCase
     mapping = Mapping.first(:conditions => {:condition => Mapping::CONTAINS})
     assert_equal [mapping], Mapping.all.select{|m| m.match?(mapping.value[2,3])}
   end
+
+  test "match doesnt find anything for empty strings" do
+    assert_equal [], Mapping.all.select{|m|m.match?("")}
+    assert_equal [], Mapping.all.select{|m|m.match?(nil)}
+  end
 end

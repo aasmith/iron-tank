@@ -32,4 +32,48 @@ class OfxLoaderTest < ActiveSupport::TestCase
     cc = ledgers(:credit_card)
   end
 
+  test "derives existing ledger by mapping" do
+    m = Mapping.find_by_condition(Mapping::EQUALS)
+
+    assert_equal m.ledger, OfxLoader.derive_ledger(m.ledger.user, m.value)
+  end
+
+  test "derives existing ledger by payee" do
+    users(:andy).ledgers.create!(:name => name="Foo #{rand(56)}")
+
+    assert_equal name, OfxLoader.derive_ledger(users(:andy), name).name
+  end
+
+  test "derives existing ledger by SIC" do
+    users(:andy).ledgers.create!(:name => name="Auto Service")
+
+    assert_equal name, OfxLoader.derive_ledger(users(:andy), "", name).name
+  end
+
+  test "derives new ledger by SIC" do
+    s = "CAR WASHES"
+    u = users(:andy)
+
+    assert_nil u.ledgers.find_by_name(OfxLoader.pretty_sic(s))
+    OfxLoader.derive_ledger(u, "", s)
+    assert_equal "Car Washes", u.ledgers.find_by_name("Car Washes").name
+  end
+
+  test "derives new ledger by payee name" do
+    p = "Duff Pizza, Inc."
+    u = users(:andy)
+
+    assert_nil u.ledgers.find_by_name(p)
+    OfxLoader.derive_ledger(u, p)
+    assert_equal p, u.ledgers.find_by_name(p).name
+  end
+
+  test "derive returns unknown ledger when no payee or sic" do
+    assert_equal "Unknown", OfxLoader.derive_ledger(users(:andy), "", nil).name 
+  end
+
+  test "pretty_sic" do
+    assert_equal "Bowling Alleys", OfxLoader.pretty_sic("BOWLING ALLEYS")
+  end
+
 end

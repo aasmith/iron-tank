@@ -9,7 +9,8 @@ class OfxLoader
         next if ledger.splits.exists?(:fit => entry.fit)
         
         amount = transaction.amount_in_pennies
-        derived_ledger = derive_ledger(user, payee)
+        sic_desc = transaction.sic_desc rescue nil
+        derived_ledger = derive_ledger(user, payee, sic_desc)
 
         e = Entry.new
         e.memo = transaction.payee
@@ -39,14 +40,33 @@ class OfxLoader
     end
 
     def derive_ledger(user, payee, sic = nil)
+      if payee.blank? && sic.blank?
+        return user.ledgers.find_or_create_by_name("Unknown")
+      end
+
       # * lookup by mapping
       mapping = user.mappings.detect{|m| m.match?(payee) }
       return mapping.ledger if mapping
 
-      # * OR lookup by sic
+      # * OR lookup by sic 
+      ledger = user.ledgers.find_by_name(pretty_sic(sic)) if sic
+      return ledger if ledger
+
       # * OR lookup by exact payee
-      # * OR create based on sic
+      ledger = user.ledgers.find_by_name(payee)
+      return ledger if ledger
+
+      # * OR create based on sic (TODO)
+      ledger = user.ledgers.create!(:name => pretty_sic(sic)) if sic
+      return ledger if ledger
+
       # * OR create based on exact payee
+      user.ledgers.create!(:name => payee)
+    end
+
+    # change a SHOUTY SIC DESCRIPTION into A Nice Readable One.
+    def pretty_sic(sic)
+      sic.humanize.split.map(&:capitalize).join(" ")
     end
 
   end
