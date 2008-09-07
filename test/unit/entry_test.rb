@@ -65,7 +65,7 @@ class EntryTest < ActiveSupport::TestCase
       assert e.valid?
 
       assert e.expense?
-      assert e.entry_type == :expense
+      assert e.entry_type == "expense"
     end
   end
 
@@ -76,7 +76,7 @@ class EntryTest < ActiveSupport::TestCase
     assert e.valid?
 
     assert e.income?
-    assert e.entry_type == :income
+    assert e.entry_type == "income"
   end
 
   test "entries categorized as transfers" do
@@ -86,7 +86,7 @@ class EntryTest < ActiveSupport::TestCase
     assert e.valid?
 
     assert e.transfer?
-    assert e.entry_type == :transfer
+    assert e.entry_type == "transfer"
   end
 
   test "entries categorized as refunds" do
@@ -96,9 +96,15 @@ class EntryTest < ActiveSupport::TestCase
     assert e.valid?
 
     assert e.refund?
-    assert e.entry_type == :refund
+    assert e.entry_type == "refund"
   end
 
   test "finds dopplegangers given an existing transfer" do
+  end
+
+  test "doppleganger only works for transfers" do
+    Entry.all.reject(&:transfer?).each do |e|
+      assert_nil e.doppleganger
+    end
   end
 end

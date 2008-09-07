@@ -7,9 +7,11 @@ class Entry < ActiveRecord::Base
   validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
 
+  before_validation :cache_entry_type!
+
   def doppleganger
     return nil unless transfer?
-    # more here...
+    find(:first, :conditions => {})
   end
 
   def refund?
@@ -28,12 +30,6 @@ class Entry < ActiveRecord::Base
     debit?(Account) && credit?(Category)
   end
 
-  def entry_type
-    [:transfer, :income, :expense, :refund].each do |t|
-      break t if send("#{t}?")
-    end
-  end
-
   def debits
     splits.select{|s| s.amount.cents < 0 }
   end
@@ -43,11 +39,11 @@ class Entry < ActiveRecord::Base
   end
 
   def debit_ledger
-    debits.first.ledger
+    debits.size > 0 && debits.first.ledger
   end
 
   def credit_ledger
-    credits.first.ledger
+    credits.size > 0 && credits.first.ledger
   end
 
   def debit?(type)
@@ -59,6 +55,16 @@ class Entry < ActiveRecord::Base
   end
 
   protected
+
+  def cache_entry_type!
+    self.entry_type = calc_entry_type
+  end
+
+  def calc_entry_type
+    %w(transfer income expense refund).each do |t|
+      break t if send("#{t}?")
+    end
+  end
 
   def splits_total_zero?
     splits.to_a.sum(&:amount).zero?
