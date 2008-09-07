@@ -54,7 +54,7 @@ class OfxLoaderTest < ActiveSupport::TestCase
     s = "CAR WASHES"
     u = users(:andy)
 
-    assert_nil u.ledgers.find_by_name(OfxLoader.pretty_sic(s))
+    assert_nil u.ledgers.find_by_name(s.titleize)
     OfxLoader.derive_ledger(u, "", s)
     assert_equal "Car Washes", u.ledgers.find_by_name("Car Washes").name
   end
@@ -70,10 +70,6 @@ class OfxLoaderTest < ActiveSupport::TestCase
 
   test "derive returns unknown ledger when no payee or sic" do
     assert_equal "Unknown", OfxLoader.derive_ledger(users(:andy), "", nil).name 
-  end
-
-  test "pretty_sic" do
-    assert_equal "Bowling Alleys", OfxLoader.pretty_sic("BOWLING ALLEYS")
   end
 
 end

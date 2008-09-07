@@ -49,7 +49,7 @@ class OfxLoader
       return mapping.ledger if mapping
 
       # * OR lookup by sic 
-      ledger = user.ledgers.find_by_name(pretty_sic(sic)) if sic
+      ledger = user.ledgers.find_by_name(sic.titleize) if sic
       return ledger if ledger
 
       # * OR lookup by exact payee
@@ -57,16 +57,11 @@ class OfxLoader
       return ledger if ledger
 
       # * OR create based on sic (TODO)
-      ledger = user.ledgers.create!(:name => pretty_sic(sic)) if sic
+      ledger = user.ledgers.create!(:name => sic.titleize) if sic
       return ledger if ledger
 
       # * OR create based on exact payee
       user.ledgers.create!(:name => payee)
-    end
-
-    # change a SHOUTY SIC DESCRIPTION into A Nice Readable One.
-    def pretty_sic(sic)
-      sic.humanize.split.map(&:capitalize).join(" ")
     end
 
   end
