@@ -6,16 +6,20 @@ class OfxLoader
       
       ofx_account = parsed_ofx.accounts.first
       ofx_account.statement.transactions.each do |transaction|
-        next if ledger.splits.exists?(:fit => entry.fit)
+        next if ledger.splits.exists?(:fit => transaction.fit_id)
         
         amount = transaction.amount_in_pennies
         sic_desc = transaction.sic_desc rescue nil
-        derived_ledger = derive_ledger(user, payee, sic_desc)
+        derived_ledger = derive_ledger(user, transaction.payee, sic_desc)
 
         e = user.entries.new
         e.memo = transaction.payee
-        e.splits << ledger.splits.build(:amount => amount)
-        e.splits << derived_ledger.splits.build(:amount => amount.oppose)
+
+        e.splits << ledger.splits.create(
+          :amount => Money.new(amount))
+
+        e.splits << derived_ledger.splits.create(
+          :amount => Money.new(amount.oppose))
 
         next if e.doppleganger 
 
@@ -57,11 +61,11 @@ class OfxLoader
       return ledger if ledger
 
       # * OR create based on sic (TODO)
-      ledger = user.ledgers.create!(:name => sic.titleize) if sic
+      ledger = user.expenses.create!(:name => sic.titleize) if sic
       return ledger if ledger
 
       # * OR create based on exact payee
-      user.ledgers.create!(:name => payee)
+      user.categories.create!(:name => payee)
     end
 
   end

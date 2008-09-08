@@ -6,6 +6,8 @@ class Ledger < ActiveRecord::Base
   has_many :mappings
   belongs_to :user
 
+  validates_presence_of :type, :allow_nils => false
+
   def balance
     Money.new(splits.sum(:amount))
   end

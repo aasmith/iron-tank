@@ -39,13 +39,13 @@ class OfxLoaderTest < ActiveSupport::TestCase
   end
 
   test "derives existing ledger by payee" do
-    users(:andy).ledgers.create!(:name => name="Foo #{rand(56)}")
+    users(:andy).expenses.create!(:name => name="Foo #{rand(56)}")
 
     assert_equal name, OfxLoader.derive_ledger(users(:andy), name).name
   end
 
   test "derives existing ledger by SIC" do
-    users(:andy).ledgers.create!(:name => name="Auto Service")
+    users(:andy).expenses.create!(:name => name="Auto Service")
 
     assert_equal name, OfxLoader.derive_ledger(users(:andy), "", name).name
   end
@@ -70,6 +70,13 @@ class OfxLoaderTest < ActiveSupport::TestCase
 
   test "derive returns unknown ledger when no payee or sic" do
     assert_equal "Unknown", OfxLoader.derive_ledger(users(:andy), "", nil).name 
+  end
+
+  test "load ofx" do
+    ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
+    OfxLoader.load_ofx!(users(:andy), ofx)
+
+    #pp Ledger.find_by_fid("789").entries
   end
 
 end
