@@ -76,7 +76,12 @@ class OfxLoaderTest < ActiveSupport::TestCase
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    #pp Ledger.find_by_fid("789").entries
+    pp Ledger.find_by_fid("789").entries.collect{|e|[e.entry_type, e.memo]}
+    
+    ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-banking.ofx")
+    OfxLoader.load_ofx!(users(:andy), ofx)
+
+    pp Ledger.find_by_fid("123").entries.collect{|e|[e.entry_type, e.memo]}
   end
 
 end
