@@ -11,13 +11,13 @@ class Entry < ActiveRecord::Base
   validate :has_two_or_more_splits
   validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
+  validates_presence_of :entry_type, :allow_nils => false
 
   before_validation :cache_entry_type!
 
   def doppleganger
     user.entries.transfers.find(:first, :include => :splits, :conditions => [
-      "    entries.posted > ? 
-       AND entries.id != ?
+      "entries.posted > ? AND entries.id != ? 
        AND (splits.amount = ? OR splits.amount = ?)",
       3.days.ago, 
       id,
@@ -74,8 +74,9 @@ class Entry < ActiveRecord::Base
 
   def calc_entry_type
     %w(transfer income expense refund).each do |t|
-      break t if send("#{t}?")
+      return t if send("#{t}?")
     end
+    nil
   end
 
   def splits_total_zero?

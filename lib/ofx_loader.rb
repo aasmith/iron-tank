@@ -6,11 +6,11 @@ class OfxLoader
       
       ofx_account = parsed_ofx.accounts.first
       ofx_account.statement.transactions.each do |transaction|
-        next if ledger.splits.exists?(:fit => entry.fit)
+        next if ledger.splits.exists?(:fit => transaction.fit_id)
         
         amount = transaction.amount_in_pennies
         sic_desc = transaction.sic_desc rescue nil
-        derived_ledger = derive_ledger(user, payee, sic_desc)
+        derived_ledger = derive_ledger(user, transaction.payee, sic_desc)
 
         e = user.entries.new
         e.memo = transaction.payee

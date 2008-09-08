@@ -72,4 +72,11 @@ class OfxLoaderTest < ActiveSupport::TestCase
     assert_equal "Unknown", OfxLoader.derive_ledger(users(:andy), "", nil).name 
   end
 
+  test "load ofx" do
+    ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
+    OfxLoader.load_ofx!(users(:andy), ofx)
+
+    pp Ledger.find_by_fid("789").entries
+  end
+
 end
