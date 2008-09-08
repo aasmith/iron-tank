@@ -1,10 +1,25 @@
 weekly_grocery:
   memo: $LABEL
+  entry_type: expense
+  posted: <%= 3.days.ago.to_date.to_s(:db) %>
+  user: andy
 payday:
   memo: $LABEL
+  entry_type: income
+  posted: <%= 14.days.ago.to_date.to_s(:db) %>
+  user: andy
 rainy_day:
   memo: $LABEL
+  entry_type: transfer
+  posted: <%= 5.days.ago.to_date.to_s(:db) %>
+  user: andy
 pay_cc:
   memo: $LABEL
+  entry_type: transfer
+  posted: <%= 7.days.ago.to_date.to_s(:db) %>
+  user: andy
 refund:
   memo: $LABEL
+  entry_type: refund
+  posted: <%= 1.days.ago.to_date.to_s(:db) %>
+  user: andy

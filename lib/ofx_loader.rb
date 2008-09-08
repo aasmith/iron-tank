@@ -12,7 +12,7 @@ class OfxLoader
         sic_desc = transaction.sic_desc rescue nil
         derived_ledger = derive_ledger(user, payee, sic_desc)
 
-        e = Entry.new
+        e = user.entries.new
         e.memo = transaction.payee
         e.splits << ledger.splits.build(:amount => amount)
         e.splits << derived_ledger.splits.build(:amount => amount.oppose)

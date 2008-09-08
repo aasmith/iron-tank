@@ -1,5 +1,10 @@
 class Entry < ActiveRecord::Base
+  belongs_to :user
   has_many :splits
+
+  %w(transfer expense income refund).each do |type|
+    named_scope type.pluralize.to_sym, :conditions => {:entry_type => type}
+  end
 
   validate :sum_of_all_splits_equal_zero
   validate :has_only_one_opposite_signed_split
@@ -10,8 +15,15 @@ class Entry < ActiveRecord::Base
   before_validation :cache_entry_type!
 
   def doppleganger
-    return nil unless transfer?
-    find(:first, :conditions => {})
+    user.entries.transfers.find(:first, :include => :splits, :conditions => [
+      "    entries.posted > ? 
+       AND entries.id != ?
+       AND (splits.amount = ? OR splits.amount = ?)",
+      3.days.ago, 
+      id,
+      credits.sum(&:amount).cents, 
+      credits.sum(&:amount).cents.oppose 
+    ])
   end
 
   def refund?

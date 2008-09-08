@@ -100,6 +100,26 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "finds dopplegangers given an existing transfer" do
+    e = users(:andy).entries.transfers.first
+    e.posted = 2.days.ago.to_date
+    e.save!
+
+    assert_nil e.doppleganger
+
+    s1, s2 = e.splits
+
+    d = users(:andy).entries.new
+    d.posted = Date.today
+    d.splits << Split.new(:amount => s1.amount, :ledger => s2.ledger)
+    d.splits << Split.new(:amount => s2.amount, :ledger => s1.ledger)
+    d.save!
+
+    assert e.doppleganger
+
+    d.posted = 3.weeks.ago.to_date
+    d.save!
+
+    assert_nil e.doppleganger
   end
 
   test "doppleganger only works for transfers" do
