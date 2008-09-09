@@ -72,6 +72,20 @@ class OfxLoaderTest < ActiveSupport::TestCase
     assert_equal "Unknown", OfxLoader.derive_ledger(users(:andy), "", nil).name 
   end
 
+  test "loading ofx doesnt add duplicates" do
+    ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
+    ledger = Ledger.find_by_fid("789")
+    before = ledger.entries.size
+
+    OfxLoader.load_ofx!(users(:andy), ofx)
+    after = ledger.entries.size
+
+    assert after > before, "should have added at least one entry"
+
+    OfxLoader.load_ofx!(users(:andy), ofx)
+    assert_equal after, ledger.entries.size, "should be no more entries"
+  end
+
   test "load ofx" do
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)

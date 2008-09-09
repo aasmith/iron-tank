@@ -16,14 +16,18 @@ class OfxLoader
         e.memo = transaction.payee
 
         e.splits << ledger.splits.create(
-          :amount => Money.new(amount))
+          :amount => Money.new(amount),
+          :fit    => transaction.fit_id
+        )
 
         e.splits << derived_ledger.splits.create(
-          :amount => Money.new(amount.oppose))
-
-        next if e.doppleganger 
+          :amount => Money.new(amount.oppose),
+          :fit    => transaction.fit_id
+        )
 
         e.save!
+        
+        e.join!(e.doppleganger) if e.doppleganger 
       end
     end
 
