@@ -16,14 +16,33 @@ class Entry < ActiveRecord::Base
   before_validation :cache_entry_type!
 
   def doppleganger
-    user.entries.transfers.find(:first, :include => :splits, :conditions => [
-      "entries.posted > ? AND entries.id != ? 
-       AND (splits.amount = ? OR splits.amount = ?)",
+    user.entries.find(:first, :include => :splits, 
+      :conditions => [ "entries.posted > ? AND entries.id != ?  
+        AND (splits.amount = ? OR splits.amount = ?)",
       3.days.ago, 
       id,
       credits.sum(&:amount).cents, 
       credits.sum(&:amount).cents.oppose 
     ])
+  end
+
+  def joinable?(other_entry)
+    ([entry_type, other_entry.entry_type] & %w(expense income)).size == 2
+  end
+
+  def join!(other_entry)
+    raise "Cannot be joined" unless joinable?(other_entry)
+
+    o_accts, o_nonaccts = other_entry.splits.partition{|s| s.ledger === Account}
+    accts, nonaccts = splits.partition{|s| s.ledger === Account}
+
+    o_accts.zip(nonaccts).each do |acct, nonacct|
+      nonacct.ledger = acct.ledger
+    end
+
+    accts.zip(o_nonaccts).each do |acct, nonacct|
+      nonacct.ledger = acct.ledger
+    end
   end
 
   def refund?

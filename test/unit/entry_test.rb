@@ -99,8 +99,8 @@ class EntryTest < ActiveSupport::TestCase
     assert e.entry_type == "refund"
   end
 
-  test "finds dopplegangers given an existing transfer" do
-    e = users(:andy).entries.transfers.first
+  test "finds dopplegangers given an existing entry" do
+    e = users(:andy).entries.expenses.first
     e.posted = 2.days.ago.to_date
     e.save!
 
@@ -122,9 +122,48 @@ class EntryTest < ActiveSupport::TestCase
     assert_nil e.doppleganger
   end
 
-  test "doppleganger only works for transfers" do
-    Entry.all.reject(&:transfer?).each do |e|
-      assert_nil e.doppleganger
+  test "joinable should only work for income/expense" do
+    a = Entry.new; a.entry_type = "income"
+    b = Entry.new; b.entry_type = "expense"
+    assert a.joinable?(b)
+
+    %w(transfer refund income expense).each do |t|
+      %w(transfer refund income expense).each do |t2|
+        a.entry_type = t
+        b.entry_type = t2
+
+        unless t == "expense" && t2 == "income" or
+               t == "income"  && t2 == "expense"
+          assert !a.joinable?(b), "#{t}, #{t2} should not be joinable"
+        end
+      end
     end
+  end
+
+  test "join" do
+
+    # Simulates a transaction from checking to the "PAYMENT THANK YOU" payee
+    u = users(:andy)
+    e = u.entries.build(:posted => 2.days.ago.to_date)
+    e.splits << Split.new(:amount =>  100_00, :ledger => Category.first)
+    e.splits << Split.new(:amount => -100_00, :ledger => Account.first)
+    e.save!
+
+    assert_nil e.doppleganger
+
+    # Simulates a transaction from "FUNDS TRANSFER" to credit card
+    d = u.entries.build(:posted => 1.days.ago.to_date)
+    d.splits << Split.new(:amount => -100_00, :ledger => Category.first)
+    d.splits << Split.new(:amount =>  100_00, :ledger => Account.first)
+    d.save!
+
+    assert_equal d, e.doppleganger
+    assert e.joinable?(d)
+
+    e.join!(d)
+    e.save!
+    d.save!
+    p e,d
+   
   end
 end
