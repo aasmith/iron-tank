@@ -11,7 +11,7 @@ class Entry < ActiveRecord::Base
   validate :has_two_or_more_splits
   validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
-  validates_presence_of :entry_type, :allow_nils => false
+  validates_presence_of :entry_type
 
   before_validation :cache_entry_type!
 
@@ -43,6 +43,8 @@ class Entry < ActiveRecord::Base
     accts.zip(o_nonaccts).each do |acct, nonacct|
       nonacct.ledger = acct.ledger
     end
+
+    Entry.transaction { other_entry.save!; save! }
   end
 
   def refund?

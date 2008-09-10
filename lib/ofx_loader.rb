@@ -27,7 +27,8 @@ class OfxLoader
 
         e.save!
         
-        e.join!(e.doppleganger) if e.doppleganger 
+        d = e.doppleganger
+        e.join!(d) if d && e.joinable?(d)
       end
     end
 
@@ -65,11 +66,11 @@ class OfxLoader
       return ledger if ledger
 
       # * OR create based on sic (TODO)
-      ledger = user.expenses.create!(:name => sic.titleize) if sic
+      ledger = user.ledgers.expenses.create!(:name => sic.titleize) if sic
       return ledger if ledger
 
       # * OR create based on exact payee
-      user.categories.create!(:name => payee)
+      user.ledgers.categories.create!(:name => payee)
     end
 
   end

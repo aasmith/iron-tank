@@ -161,9 +161,6 @@ class EntryTest < ActiveSupport::TestCase
     assert e.joinable?(d)
 
     e.join!(d)
-    e.save!
-    d.save!
-    p e,d
-   
+    #p e,e.splits,d,d.splits
   end
 end

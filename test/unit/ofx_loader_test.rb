@@ -39,13 +39,13 @@ class OfxLoaderTest < ActiveSupport::TestCase
   end
 
   test "derives existing ledger by payee" do
-    users(:andy).expenses.create!(:name => name="Foo #{rand(56)}")
+    users(:andy).ledgers.expenses.create!(:name => name="Foo #{rand(56)}")
 
     assert_equal name, OfxLoader.derive_ledger(users(:andy), name).name
   end
 
   test "derives existing ledger by SIC" do
-    users(:andy).expenses.create!(:name => name="Auto Service")
+    users(:andy).ledgers.expenses.create!(:name => name="Auto Service")
 
     assert_equal name, OfxLoader.derive_ledger(users(:andy), "", name).name
   end
@@ -90,12 +90,14 @@ class OfxLoaderTest < ActiveSupport::TestCase
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    pp Ledger.find_by_fid("789").entries.collect{|e|[e.entry_type, e.memo]}
+    Ledger.find_by_fid("789").entries.size
+
+    #pp Ledger.find_by_fid("789").entries.collect{|e|[e.entry_type, e.memo]}
     
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-banking.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    pp Ledger.find_by_fid("123").entries.collect{|e|[e.entry_type, e.memo]}
+    #pp Ledger.find_by_fid("123").entries.collect{|e|[e.entry_type, e.memo]}
   end
 
 end

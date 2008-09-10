@@ -6,7 +6,11 @@ class Ledger < ActiveRecord::Base
   has_many :mappings
   belongs_to :user
 
-  validates_presence_of :type, :allow_nils => false
+  %w(categories expenses transfers).each do |t|
+    named_scope t.to_sym, :conditions => {:type => t.classify}
+  end
+
+  validates_presence_of :type
 
   def balance
     Money.new(splits.sum(:amount))
