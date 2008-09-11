@@ -28,10 +28,8 @@ class OfxLoader
         e.save!
         
         d = e.doppleganger
-if d && e.joinable?(d) 
-        e.join!(d) 
-        puts "hi", e.memo, d.memo
-end
+
+        e.join!(d) if d && e.joinable?(d) 
       end
     end
 

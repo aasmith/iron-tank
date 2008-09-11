@@ -39,15 +39,20 @@ class Entry < ActiveRecord::Base
     o_accts, o_nonaccts = other_entry.splits.partition{|s| s.ledger === Account}
     accts, nonaccts = splits.partition{|s| s.ledger === Account}
 
-    o_accts.zip(nonaccts).each do |acct, nonacct|
-      nonacct.ledger = acct.ledger
-    end
+    Entry.transaction do
+      o_accts.zip(nonaccts).each do |acct, nonacct|
+        nonacct.ledger = acct.ledger
+        nonacct.save!
+      end
 
-    accts.zip(o_nonaccts).each do |acct, nonacct|
-      nonacct.ledger = acct.ledger
-    end
+      accts.zip(o_nonaccts).each do |acct, nonacct|
+        nonacct.ledger = acct.ledger
+        nonacct.save!
+      end
 
-    Entry.transaction { other_entry.save!; save! }
+      other_entry.save!
+      save!
+    end
   end
 
   def refund?

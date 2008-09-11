@@ -145,22 +145,35 @@ class EntryTest < ActiveSupport::TestCase
     # Simulates a transaction from checking to the "PAYMENT THANK YOU" payee
     u = users(:andy)
     e = u.entries.build(:posted => 2.days.ago)
-    e.splits << Split.new(:amount =>  100_00, :ledger => Category.first)
-    e.splits << Split.new(:amount => -100_00, :ledger => Account.first)
+    e.splits << Split.new(:amount =>  100, :ledger => Category.first)
+    e.splits << Split.new(:amount => -100, :ledger => Account.last)
     e.save!
 
     assert_nil e.doppleganger
 
     # Simulates a transaction from "FUNDS TRANSFER" to credit card
     d = u.entries.build(:posted => 1.days.ago)
-    d.splits << Split.new(:amount => -100_00, :ledger => Category.first)
-    d.splits << Split.new(:amount =>  100_00, :ledger => Account.first)
+    d.splits << Split.new(:amount => -100, :ledger => Category.first)
+    d.splits << Split.new(:amount =>  100, :ledger => Account.first)
     d.save!
 
     assert_equal d, e.doppleganger
     assert e.joinable?(d)
 
     e.join!(d)
-    #p e,e.splits,d,d.splits
+
+    e.reload
+    d.reload
+
+    assert_equal 2, e.splits.size
+    assert_equal 2, d.splits.size
+
+    assert e.splits.all?{|s|s.ledger === Account}
+    assert d.splits.all?{|s|s.ledger === Account}
+
+    assert e.splits.any?{|s|s.ledger == Account.first}
+    assert e.splits.any?{|s|s.ledger == Account.last}
+    assert d.splits.any?{|s|s.ledger == Account.first}
+    assert d.splits.any?{|s|s.ledger == Account.last}
   end
 end

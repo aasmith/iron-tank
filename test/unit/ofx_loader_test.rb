@@ -86,26 +86,24 @@ class OfxLoaderTest < ActiveSupport::TestCase
     assert_equal after, ledger.entries.size, "should be no more entries"
   end
 
-  test "load ofx" do
+  test "load ofx creates a transfer" do
+    # this test relies on certain entries in the banking and credit-card ofx.
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    Ledger.find_by_fid("789").entries.each{|e|
-      p e
-      p "-----"
-      p e.splits
-      p "====="
-    }
+    split = Ledger.find_by_fid("789").splits.find_by_fit("78-9")
+
+    assert_equal "income", split.entry.entry_type, 
+      "should not have been matched with a doppleganger"
     
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-banking.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    Ledger.find_by_fid("123").entries.each{|e|
-      p e
-      p "-----"
-      p e.splits
-      p "====="
-    }
+    split.reload
+    assert_equal "transfer", split.entry.entry_type
+    
+    other_split = Ledger.find_by_fid("123").splits.find_by_fit("11 22")
+    assert_equal "transfer", other_split.entry.entry_type
   end
 
 end
