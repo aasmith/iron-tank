@@ -11,16 +11,19 @@ class Entry < ActiveRecord::Base
   validate :has_two_or_more_splits
   validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
-  validates_presence_of :entry_type
+  validates_presence_of :entry_type, :posted
 
   before_validation :cache_entry_type!
 
+  def posted=(date)
+    self[:posted] = date.to_date if date
+  end
+
   def doppleganger
     user.entries.find(:first, :include => :splits, 
-      :conditions => [ "entries.posted > ? AND entries.id != ?  
-        AND (splits.amount = ? OR splits.amount = ?)",
-      3.days.ago, 
-      id,
+      :conditions => [ "entries.posted < ? AND entries.posted > ?
+        AND entries.id != ?  AND (splits.amount = ? OR splits.amount = ?)",
+      posted + 3.days, posted - 3.days, id,
       credits.sum(&:amount).cents, 
       credits.sum(&:amount).cents.oppose 
     ])

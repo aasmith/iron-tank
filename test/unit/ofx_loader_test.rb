@@ -90,14 +90,22 @@ class OfxLoaderTest < ActiveSupport::TestCase
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-creditcard.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    Ledger.find_by_fid("789").entries.size
-
-    #pp Ledger.find_by_fid("789").entries.collect{|e|[e.entry_type, e.memo]}
+    Ledger.find_by_fid("789").entries.each{|e|
+      p e
+      p "-----"
+      p e.splits
+      p "====="
+    }
     
     ofx = File.read("#{RAILS_ROOT}/test/fixtures/ofx/andy-banking.ofx")
     OfxLoader.load_ofx!(users(:andy), ofx)
 
-    #pp Ledger.find_by_fid("123").entries.collect{|e|[e.entry_type, e.memo]}
+    Ledger.find_by_fid("123").entries.each{|e|
+      p e
+      p "-----"
+      p e.splits
+      p "====="
+    }
   end
 
 end

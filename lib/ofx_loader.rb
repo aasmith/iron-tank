@@ -12,7 +12,7 @@ class OfxLoader
         sic_desc = transaction.sic_desc rescue nil
         derived_ledger = derive_ledger(user, transaction.payee, sic_desc)
 
-        e = user.entries.new
+        e = user.entries.new(:posted => transaction.date)
         e.memo = transaction.payee
 
         e.splits << ledger.splits.create(
@@ -28,7 +28,10 @@ class OfxLoader
         e.save!
         
         d = e.doppleganger
-        e.join!(d) if d && e.joinable?(d)
+if d && e.joinable?(d) 
+        e.join!(d) 
+        puts "hi", e.memo, d.memo
+end
       end
     end
 

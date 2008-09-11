@@ -6,7 +6,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "sum of all splits must equal zero" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100, :ledger => Account.new)
     e.splits << Split.new(:amount => -99, :ledger => Account.new)
     assert !e.valid?
@@ -16,7 +16,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "must have one and only one opposite sign" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 50, :ledger => Account.new)
     e.splits << Split.new(:amount => 50, :ledger => Account.new)
     e.splits << Split.new(:amount => -100, :ledger => Account.new)
@@ -28,7 +28,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "must have two or more splits" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 1, :ledger => Account.new)
     assert !e.valid?
 
@@ -37,7 +37,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "must not have any zero-value splits" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100, :ledger => Account.new)
     e.splits << Split.new(:amount => -100, :ledger => Account.new)
     e.splits << Split.new(:amount => 0, :ledger => Account.new)
@@ -48,7 +48,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "cannot have entry composed entirely of categories" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100,  :ledger => Category.new)
     e.splits << Split.new(:amount => -100, :ledger => Expense.new)
     assert !e.valid?
@@ -59,7 +59,7 @@ class EntryTest < ActiveSupport::TestCase
 
   test "entries categorized as expenses" do
     [Category, Expense].each do |c|
-      e = Entry.new
+      e = Entry.new(:posted => Date.today)
       e.splits << Split.new(:amount => -100, :ledger => Account.new)
       e.splits << Split.new(:amount =>  100, :ledger => c.new)
       assert e.valid?
@@ -70,7 +70,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "entries categorized as incomes" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100,  :ledger => Account.new)
     e.splits << Split.new(:amount => -100, :ledger => Category.new)
     assert e.valid?
@@ -80,7 +80,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "entries categorized as transfers" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100,  :ledger => Account.new)
     e.splits << Split.new(:amount => -100, :ledger => Account.new)
     assert e.valid?
@@ -90,7 +90,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "entries categorized as refunds" do
-    e = Entry.new
+    e = Entry.new(:posted => Date.today)
     e.splits << Split.new(:amount => 100,  :ledger => Account.new)
     e.splits << Split.new(:amount => -100, :ledger => Expense.new)
     assert e.valid?
@@ -101,7 +101,7 @@ class EntryTest < ActiveSupport::TestCase
 
   test "finds dopplegangers given an existing entry" do
     e = users(:andy).entries.expenses.first
-    e.posted = 2.days.ago.to_date
+    e.posted = 2.days.ago
     e.save!
 
     assert_nil e.doppleganger
@@ -116,7 +116,7 @@ class EntryTest < ActiveSupport::TestCase
 
     assert e.doppleganger
 
-    d.posted = 3.weeks.ago.to_date
+    d.posted = 3.weeks.ago
     d.save!
 
     assert_nil e.doppleganger
@@ -144,7 +144,7 @@ class EntryTest < ActiveSupport::TestCase
 
     # Simulates a transaction from checking to the "PAYMENT THANK YOU" payee
     u = users(:andy)
-    e = u.entries.build(:posted => 2.days.ago.to_date)
+    e = u.entries.build(:posted => 2.days.ago)
     e.splits << Split.new(:amount =>  100_00, :ledger => Category.first)
     e.splits << Split.new(:amount => -100_00, :ledger => Account.first)
     e.save!
@@ -152,7 +152,7 @@ class EntryTest < ActiveSupport::TestCase
     assert_nil e.doppleganger
 
     # Simulates a transaction from "FUNDS TRANSFER" to credit card
-    d = u.entries.build(:posted => 1.days.ago.to_date)
+    d = u.entries.build(:posted => 1.days.ago)
     d.splits << Split.new(:amount => -100_00, :ledger => Category.first)
     d.splits << Split.new(:amount =>  100_00, :ledger => Account.first)
     d.save!
