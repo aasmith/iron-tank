@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <!--[if IE]><%= javascript_include_tag "excanvas" %><![endif]-->
+    <%= javascript_include_tag "jquery", "jquery-flot" %>
+    <%= stylesheet_link_tag *@stylesheets.unshift("reset", "application") %>
+    <!-- Apply these styles again in a style tag for webkit based browsers.
+         Remove these, and plotting fails, or appears skewed. -->
+    <%= apply_webkit_hack(@stylesheets) %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
