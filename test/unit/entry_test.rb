@@ -145,16 +145,23 @@ class EntryTest < ActiveSupport::TestCase
     # Simulates a transaction from checking to the "PAYMENT THANK YOU" payee
     u = users(:andy)
     e = u.entries.build(:posted => 2.days.ago)
-    e.splits << Split.new(:amount =>  100, :ledger => Category.first)
-    e.splits << Split.new(:amount => -100, :ledger => Account.last)
+
+    ck = ledgers(:checking)
+    cc = ledgers(:credit_card)
+    
+    crd = Category.create!(:user => u, :name => "PAYMENT THANK YOU")
+    deb = Category.create!(:user => u, :name => "ELECTRONIC WITHDRAWL")
+
+    e.splits.build(:amount =>  100, :ledger => deb)
+    e.splits.build(:amount => -100, :ledger => ck)
     e.save!
 
     assert_nil e.doppleganger
 
     # Simulates a transaction from "FUNDS TRANSFER" to credit card
     d = u.entries.build(:posted => 1.days.ago)
-    d.splits << Split.new(:amount => -100, :ledger => Category.first)
-    d.splits << Split.new(:amount =>  100, :ledger => Account.first)
+    d.splits << Split.new(:amount => -100, :ledger => crd)
+    d.splits << Split.new(:amount =>  100, :ledger => cc)
     d.save!
 
     assert_equal d, e.doppleganger
@@ -171,9 +178,9 @@ class EntryTest < ActiveSupport::TestCase
     assert e.splits.all?{|s|s.ledger === Account}
     assert d.splits.all?{|s|s.ledger === Account}
 
-    assert e.splits.any?{|s|s.ledger == Account.first}
-    assert e.splits.any?{|s|s.ledger == Account.last}
-    assert d.splits.any?{|s|s.ledger == Account.first}
-    assert d.splits.any?{|s|s.ledger == Account.last}
+    assert e.splits.any?{|s|s.ledger == ck}
+    assert e.splits.any?{|s|s.ledger == cc}
+    assert d.splits.any?{|s|s.ledger == ck}
+    assert d.splits.any?{|s|s.ledger == cc}
   end
 end
