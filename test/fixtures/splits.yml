@@ -1,12 +1,22 @@
-weekly_grocery_debit:
-  entry: weekly_grocery
+recent_weekly_grocery_debit:
+  entry: recent_weekly_grocery
   ledger: credit_card
   amount: -1288
   fit: cc1
-weekly_grocery_credit:
-  entry: weekly_grocery
+recent_weekly_grocery_credit:
+  entry: recent_weekly_grocery
   ledger: groceries
   amount: 1288
+
+older_weekly_grocery_debit:
+  entry: older_weekly_grocery
+  ledger: credit_card
+  amount: -1732
+  fit: cc1
+older_weekly_grocery_credit:
+  entry: older_weekly_grocery
+  ledger: groceries
+  amount: 1732
 
 payday_debit:
   entry: payday

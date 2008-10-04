@@ -1,4 +1,9 @@
-weekly_grocery:
+older_weekly_grocery:
+  memo: $LABEL
+  entry_type: expense
+  posted: <%= 10.days.ago.to_date.to_s(:db) %>
+  user: andy
+recent_weekly_grocery:
   memo: $LABEL
   entry_type: expense
   posted: <%= 3.days.ago.to_date.to_s(:db) %>

@@ -10,6 +10,10 @@ class Ledger < ActiveRecord::Base
     named_scope t.to_sym, :conditions => {:type => t.classify}
   end
 
+  named_scope :activity_within, lambda { |date|
+    { :conditions => ["entries.posted > ?", date], :include => :entries }
+  }
+
   validates_presence_of :type
 
   def balance
