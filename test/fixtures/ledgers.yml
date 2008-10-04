@@ -1,28 +1,44 @@
 checking:
   type: Account
-  name: $LABEL
+  name: Checking
   user: andy
   fid: 123
   account_number: "0123456"
   routing_number: "003300"
 savings:
   type: Account
-  name: $LABEL
+  name: Savings
   user: andy
   fid: 456
   account_number: 0123456789
   routing_number: 004400
 credit_card:
   type: Account
-  name: $LABEL
+  name: Credit Card
   user: andy
   fid: 789
   account_number: XXXXXXXXXXXX1111
 groceries:
   type: Expense
-  name: $LABEL
+  name: Groceries
+  user: andy
+insurance:
+  type: Expense
+  name: Insurance
+  user: andy
+dining:
+  type: Expense
+  name: Dining
+  user: andy
+recreation:
+  type: Expense
+  name: Recreation
+  user: andy
+entertainment:
+  type: Expense
+  name: Entertainment
   user: andy
 salary:
   type: Category
-  name: $LABEL
+  name: Salary
   user: andy
