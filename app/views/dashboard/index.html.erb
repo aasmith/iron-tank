@@ -26,41 +26,19 @@
     </div>
   </div>
 
+  <% @user.ledgers.expenses.activity_within(7.days.ago).each do |expense| %>
   <div class="category box">
     <div class="chart">...</div>
-    <div class="spend">$1,032</div>
+    <div class="spend"><%= expense.balance.format %></div>
     <div class="diff unchanged"></div>
-    <div class="title">Rent</div>
+    <div class="title"><%= expense.name %></div>
     <div class="break"></div>
     <div class="expanded">
       <hr/>
       OMG HI
     </div>
   </div>
-
-  <div class="category box">
-    <div class="chart">...</div>
-    <div class="spend">$232</div>
-    <div class="diff under">$132</div>
-    <div class="title">Dining</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr/>
-      OMG HI
-    </div>
-  </div>
-
-  <div class="category box">
-    <div class="chart">...</div>
-    <div class="spend">$45</div>
-    <div class="diff under">$2</div>
-    <div class="title" title="Longer Category Name">Longer Category Name</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr/>
-      OMG HI
-    </div>
-  </div>
+<% end %>
 
   <div class="remaining category box">
     <div class="chart">&nbsp;</div>
@@ -120,10 +98,13 @@
   <div class="date-range box">
     <p>Showing data for</p>
     <p>Last
-      <a href="http://someplace">7</a>
-      <strong>30</strong>
-      <a href="http://someplace">60</a>
-      <a href="http://someplace">180</a>
+      <% @days.each do |d| %>
+        <% if @current_days == d %>
+          <strong><%= d %></strong>
+        <% else %>
+          <%= link_to d, {:days => d} %>
+        <% end %>
+      <% end %>
       days
     </p>
   </div>
