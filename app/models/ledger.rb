@@ -1,7 +1,12 @@
 # A Ledger is a logical group of entries. It can represent an account, asset,
 # or a grouping, such as a category.
 class Ledger < ActiveRecord::Base
-  has_many :splits
+  has_many :splits do
+    def balance
+      Money.new(sum(:amount))
+    end
+  end
+
   has_many :entries, :through => :splits
   has_many :mappings
   belongs_to :user
@@ -17,7 +22,7 @@ class Ledger < ActiveRecord::Base
   validates_presence_of :type
 
   def balance
-    Money.new(splits.sum(:amount))
+    splits.balance
   end
 end
 
