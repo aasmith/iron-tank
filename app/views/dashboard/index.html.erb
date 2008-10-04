@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <% @user.ledgers.expenses.activity_within(7.days.ago).each do |expense| %>
+  <% @expenses.each do |expense| %>
   <div class="category box">
     <div class="chart">...</div>
     <div class="spend"><%= expense.balance.format %></div>

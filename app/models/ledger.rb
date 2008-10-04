@@ -10,7 +10,7 @@ class Ledger < ActiveRecord::Base
     named_scope t.to_sym, :conditions => {:type => t.classify}
   end
 
-  named_scope :activity_within, lambda { |date|
+  named_scope :activity_since, lambda { |date|
     { :conditions => ["entries.posted > ?", date], :include => :entries }
   }
 

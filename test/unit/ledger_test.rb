@@ -7,8 +7,8 @@ class LedgerTest < ActiveSupport::TestCase
     end
   end
 
-  test "activity_within" do
-    ledgers = Ledger.activity_within(7.days.ago)
+  test "activity_since" do
+    ledgers = Ledger.activity_since(7.days.ago)
     
     ledgers.each do |ledger|
       assert ledger.entries.any?{|e| e.posted > 7.days.ago.to_date }
