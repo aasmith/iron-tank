@@ -6,7 +6,7 @@ class Ledger < ActiveRecord::Base
   has_many :mappings
   belongs_to :user
 
-  %w(categories expenses transfers).each do |t|
+  %w(categories expenses).each do |t|
     named_scope t.to_sym, :conditions => {:type => t.classify}
   end
 
@@ -16,3 +16,4 @@ class Ledger < ActiveRecord::Base
     Money.new(splits.sum(:amount))
   end
 end
+
