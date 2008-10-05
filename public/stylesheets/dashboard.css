@@ -1,6 +1,8 @@
 .expanded { display:none; line-height: 1.8em;}
-.expanded table { margin: 0 20px; width: 90%; }
-.expanded table tr > td:first-child { font-weight: bold;}
+.expanded table { margin: 0; width: 100%; }
+.expanded table td {overflow:hidden; white-space:nowrap;}
+.expanded table tr > td:first-child { padding-left:20px;font-weight: bold; width: 20%;}
+.expanded table tr > td:last-child { text-align:right; }
 
 .category {line-height: 2em;}
 .category .chart { width: 30%; float: left; } /* !wk-hack */
