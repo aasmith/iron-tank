@@ -7,6 +7,7 @@ class DashboardController < ApplicationController
     (@days << @current_days).sort! unless @days.include?(@current_days)
 
     @expenses = @user.ledgers.expenses.activity_since(@start_date)
+    @daily_entries = @user.entries.since(@start_date).group_by(&:posted)
   end
 
 end
