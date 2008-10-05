@@ -21,7 +21,7 @@ rainy_day:
 pay_cc:
   memo: $LABEL
   entry_type: transfer
-  posted: <%= 7.days.ago.to_date.to_s(:db) %>
+  posted: <%= 10.days.ago.to_date.to_s(:db) %>
   user: andy
 refund:
   memo: $LABEL

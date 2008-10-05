@@ -63,43 +63,31 @@
 
   <h3>Recent Transactions</h3>
 
-  <div class="transaction box">
-    <div class="amount">$40.23</div>
-    <div class="date">Friday, 12<sup>th</sup></div>
-    <div class="categories">Groceries, Dining, 2 Others</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr />
-      <table>
-        <tr><td>$12.56</td><td>from Credit Card</td><td>Groceries</td></tr>
-        <tr><td>$5.13</td><td>from Credit Card</td><td>Dining</td></tr>
-        <tr><td>$10.00</td><td>from Checking</td><td>Internet</td></tr>
-        <tr><td>$12.54</td><td>from Credit Card</td><td>Entertainment</td></tr>
-      </table>
+  <% @daily_entries.each do |date, entries| %>
+    <div class="transaction box">
+      <div class="amount">
+        <%= entries.collect(&:credits).flatten.sum(&:amount).format %>
+      </div>
+      <div class="date"><%= pretty_date(date, @current_days >= 30) %></div>
+      <div class="categories">
+        <%= h summarize_ledgers(entries.map(&:remote_ledgers)) %>
+      </div>
+      <div class="break"></div>
+      <div class="expanded">
+        <hr/>
+        <table>
+          <% entries.each do |entry| %>
+            <tr>
+              <td><%= summarize_entry_amount(entry) %></td>
+              <td><%= summarize_entry_type(entry)   %></td>
+              <td><%= entry.remote_ledgers.collect(&:name) %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
     </div>
-  </div>
+  <% end %>
 
-  <div class="transaction box">
-    <div class="amount">$10.93</div>
-    <div class="date">Wednesday, 10<sup>th</sup></div>
-    <div class="categories">Groceries</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr/>
-      OMG HI
-    </div>
-  </div>
-
-  <div class="transaction box">
-    <div class="amount">$173.09</div>
-    <div class="date">Sunday, 7<sup>th</sup></div>
-    <div class="categories">Recreation, Entertainment</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr/>
-      OMG HI
-    </div>
-  </div>
 </div>
 
 <div id="side">
