@@ -183,4 +183,29 @@ class EntryTest < ActiveSupport::TestCase
     assert d.splits.any?{|s|s.ledger == ck}
     assert d.splits.any?{|s|s.ledger == cc}
   end
+
+  test "remote_ledgers never returns Accounts" do
+    Entry.all.each do |entry|
+      entry.remote_ledgers.each{|lg| assert_not_equal Account, lg.class }
+    end
+  end
+
+  test "remote_ledgers returns empty array for transfers" do
+    Entry.all.each do |entry|
+      assert entry.remote_ledgers.empty? if entry.transfer?
+    end
+  end
+
+  test "remote_ledgers return Expenses or Categories for everything else" do
+    Entry.all.each do |entry|
+      unless entry.transfer?
+        assert !entry.remote_ledgers.empty?
+
+        entry.remote_ledgers.each {|ledger|
+          assert [Expense, Category].include?(ledger.class)
+        }
+      end
+    end
+  end
+
 end

@@ -95,6 +95,30 @@ class Entry < ActiveRecord::Base
     credit_ledger.is_a? type
   end
 
+  # Returns the ledgers for this entry that are on the 'remote' side
+  # of the transaction. For instance, a transaction between Groceries
+  # and Checking, would return the Groceries ledger. Transfers return
+  # an empty array.
+  def remote_ledgers
+    mappings = {
+      "transfer" => [], 
+      "income"   => :debits, 
+      "expense"  => :credits, 
+      "refund"   => :debits }
+
+    mappings.each do |entry_type, result|
+      next unless entry_type() == entry_type
+
+      if result.is_a?(Symbol)
+        return send(result).collect(&:ledger)
+      else
+        return result
+      end
+    end
+
+    raise "Unable to find remote ledgers"
+  end
+
   protected
 
   def cache_entry_type!
