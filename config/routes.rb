@@ -44,6 +44,11 @@ ActionController::Routing::Routes.draw do |map|
     :requirements => {:days => /\d+/},
     :defaults => { :days => 30 }
 
+  map.connect 'dashboard/index/:days',
+    :controller => 'dashboard', :action => 'index',
+    :requirements => {:days => /\d+/},
+    :defaults => { :days => 30 }
+
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end
