@@ -10,9 +10,8 @@ class DashboardControllerTest < ActionController::TestCase
   end
 
   test "index without days produces a default day range" do
-    assert_recognizes({
-      :controller => 'dashboard', :action => 'index', :days => "30"}, 
-      "dashboard")
+    assert_routing("dashboard",
+      {:controller => 'dashboard', :action => 'index', :days => "30"})
   end
 
   test "custom day is added to selection list of days" do
