@@ -7,7 +7,7 @@ end
 class Money
   alias old_format format
   def format(*rules)
-    (r = old_format(rules)) == "free" ? "$0" : r
+    (r = old_format(rules)) == "free" ? "$0" : r.commify
   end
 end
 
@@ -21,3 +21,8 @@ class Array
   end
 end
 
+class String
+  def commify
+    reverse.gsub(/(\d\d\d)(?=\d)(?!\d*\.)/, '\1,').reverse
+  end
+end
