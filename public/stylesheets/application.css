@@ -21,6 +21,11 @@ abbr {
   border-bottom: 1px dotted black;
 }
 
+sup {
+  vertical-align: super;
+  font-size: 0.8em;
+}
+
 .break { clear: both;}
 
 

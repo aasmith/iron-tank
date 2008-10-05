@@ -7,4 +7,11 @@ module ApplicationHelper
 
     content_tag("style", css.scan(/^.*?!wk-hack.*?$/).join("\n"))
   end
+
+  def pretty_date(date)
+    ordinal_day = date.day.ordinalize
+    ordinal_day.sub!(/[[:alpha:]]+/){ |m| content_tag("sup", m) }
+
+    date.strftime("%A, %%s %B") % ordinal_day
+  end
 end

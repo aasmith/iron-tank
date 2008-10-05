@@ -27,18 +27,31 @@
   </div>
 
   <% @expenses.each do |expense| %>
-  <div class="category box">
-    <div class="chart">...</div>
-    <div class="spend"><%= expense.balance.format %></div>
-    <div class="diff unchanged"></div>
-    <div class="title"><%= expense.name %></div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr/>
-      OMG HI
+    <% splits = expense.splits.since(@start_date) %>
+    <div class="category box">
+      <div class="chart">...</div>
+      <div class="spend">
+        <%= splits.balance.format %>
+      </div>
+      <div class="diff unchanged"></div>
+      <div class="title"><%= expense.name %></div>
+      <div class="break"></div>
+      <div class="expanded">
+        <hr />
+        <p>Average line: <a href="">Change to a goal amount</a></p>
+        <hr />
+        <table>
+          <% splits.each do |split| %>
+          <tr>
+            <td><%= split.amount.format %></td>
+            <td>from <%= split.ledger.name %></td>
+            <td><%= pretty_date(split.entry.posted) %></td>
+          </tr>
+        <% end %>
+        </table>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
 
   <div class="remaining category box">
     <div class="chart">&nbsp;</div>
