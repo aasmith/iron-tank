@@ -1,10 +1,15 @@
 class Entry < ActiveRecord::Base
   belongs_to :user
   has_many :splits
+  has_many :ledgers, :through => :splits
 
   %w(transfer expense income refund).each do |type|
     named_scope type.pluralize.to_sym, :conditions => {:entry_type => type}
   end
+
+  named_scope :since, lambda { |date|
+    { :conditions => ["posted > ?", date] }
+  }
 
   validate :sum_of_all_splits_equal_zero
   validate :has_only_one_opposite_signed_split

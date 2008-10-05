@@ -19,6 +19,14 @@ class Ledger < ActiveRecord::Base
     { :conditions => ["entries.posted > ?", date], :include => :entries }
   }
 
+  named_scope :credits, 
+    :conditions => ["splits.amount > 0"], 
+    :include => :splits
+  
+  named_scope :debits, 
+    :conditions => ["splits.amount < 0"], 
+    :include => :splits
+
   validates_presence_of :type
 
   def balance
