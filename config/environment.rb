@@ -69,3 +69,10 @@ end
 
 require 'vendor/ofx-parser/lib/ofx-parser'
 require 'lib/core_ext'
+
+Sentry::SymmetricSentry.default_algorithm = 'aes-256-cbc'
+Sentry::SymmetricSentry.default_key = "r4PfwWL2PgeDHq8b6ZNsZawOAS
+6sCg9s6CCqTSZ4XBdP9QXoerp1EH5dqcqV8skdEHMsm3qJCTNRSYBsya7cwJZg7AF
+v2vywWsHBAjLIfvvbJY3UQgOYtD6UHypCbsjIeIOOe6bbdKh5cd56fMWwEqLpgyA3
+CSZFt6sJVUdOyCeqpo5cVAzHMJv5L0UZNtKdndvvs7IE" 
+

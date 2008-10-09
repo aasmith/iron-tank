@@ -1,2 +1,7 @@
 remove accounts() from ofx-parser, and add account().
 spec says there should only ever be one account.
+
+encryption has been added for account credentials. This should
+not use a default key. Ideally the user should enter a 'vault key'
+to unlock these details when fetching OFX, etc.
+
