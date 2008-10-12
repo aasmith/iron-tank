@@ -11,7 +11,7 @@ class Ledger < ActiveRecord::Base
   has_many :mappings
   belongs_to :user
 
-  %w(categories expenses).each do |t|
+  %w(accounts categories expenses).each do |t|
     named_scope t.to_sym, :conditions => {:type => t.classify}
   end
 
