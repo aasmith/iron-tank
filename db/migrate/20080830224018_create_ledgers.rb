@@ -12,7 +12,7 @@ class CreateLedgers < ActiveRecord::Migration
       t.string :account_number
       t.string :routing_number
 
-      t.text :encrypted_credentials
+      t.text :credentials
 
       t.timestamps
     end
