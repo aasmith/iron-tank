@@ -8,6 +8,7 @@ class CreateLedgers < ActiveRecord::Migration
 
       # OFX fields: financial institute id, acct num, routing num
       t.string :fid
+      t.string :institution
       t.string :account_number
       t.string :routing_number
 

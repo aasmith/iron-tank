@@ -3,9 +3,9 @@
 # installment loans, use a Category instead.
 class Account < Ledger
   def fetch!
-    fetcher = FetcherResolver.resolve(self) # return class like UsBankFetcher
-    raw_ofx = fetcher.fetch_ofx(user, self) # get the raw data
-    OfxLoader.load_ofx!(user, raw_ofx) # parse and create entries
+    fetcher_class = Fetcher.resolve(:institution => institution)
+    fetcher = fetcher_class.new(self)
+    OfxLoader.load_ofx!(user, fetcher.fetch_ofx) # parse and create entries
   end
 
   def credentials
