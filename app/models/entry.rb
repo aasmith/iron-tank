@@ -11,6 +11,9 @@ class Entry < ActiveRecord::Base
     { :conditions => ["posted > ?", date] }
   }
 
+  named_scope :approved,   :conditions => {:approved => true}
+  named_scope :unapproved, :conditions => {:approved => false}
+
   validate :sum_of_all_splits_equal_zero
   validate :has_only_one_opposite_signed_split
   validate :has_two_or_more_splits
