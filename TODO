@@ -1,7 +1,25 @@
-remove accounts() from ofx-parser, and add account().
-spec says there should only ever be one account.
+ofx-parser:
 
-encryption has been added for account credentials. This should
-not use a default key. Ideally the user should enter a 'vault key'
-to unlock these details when fetching OFX, etc.
+ - remove accounts() from ofx-parser, and add account().
+   spec says there should only ever be one account.
+ - raise error when ofx is blank.
+
+iron-tank:
+
+ - encryption has been added for account credentials. This should
+   not use a default key. Ideally the user should enter a 'vault key'
+   to unlock these details when fetching OFX, etc.
+
+ - allow mappings to work on more than just payee names.
+
+ - add a liability account type for tracking loans, such as car payments,
+   student loans, and mortgages. Entries from an account into a liability
+   are classed as an expense (in entry_type), so that it can be reflected 
+   in regular outgoings. Entries between two accounts remain the same 
+   (i.e transfer).
+
+3rd parties:
+
+ - flot
+ - jeditable
 
