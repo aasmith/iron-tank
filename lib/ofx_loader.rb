@@ -50,10 +50,6 @@ class OfxLoader
     end
 
     def derive_ledger(user, payee, sic = nil)
-      if payee.blank? && sic.blank?
-        return user.ledgers.find_or_create_by_name("Unknown")
-      end
-
       # * lookup by mapping
       mapping = user.mappings.detect{|m| m.match?(payee) }
       return mapping.ledger if mapping
@@ -70,8 +66,8 @@ class OfxLoader
       ledger = user.ledgers.expenses.create!(:name => sic.titleize) if sic
       return ledger if ledger
 
-      # * OR create based on exact payee
-      user.ledgers.categories.create!(:name => payee)
+      # otherwise, add to 'Unknown' ledger
+      user.ledgers.categories.find_or_create_by_name("Unknown")
     end
 
   end

@@ -64,8 +64,8 @@ class OfxLoaderTest < ActiveSupport::TestCase
     u = users(:andy)
 
     assert_nil u.ledgers.find_by_name(p)
-    OfxLoader.derive_ledger(u, p)
-    assert_equal p, u.ledgers.find_by_name(p).name
+    ledger = OfxLoader.derive_ledger(u, p)
+    assert_equal "Unknown", ledger.name
   end
 
   test "derive returns unknown ledger when no payee or sic" do
