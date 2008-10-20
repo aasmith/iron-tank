@@ -1,0 +1,19 @@
+<tr id="entry-<%=entry.id%>" class="entry">
+  <td class="money <%=entry.entry_type%>">
+    <%= summarize_entry_amount(entry) %>
+  </td>
+  <td>
+    <%= "from" if entry.transfer? %>
+    <%= entry.local_ledgers.map(&:name).join(", ") %>
+  </td>
+  <td>
+    <%= "to" if entry.transfer? %>
+    <%= entry.remote_ledgers.map(&:name).join(", ") %>
+    <%= "(refund)" if entry.refund? %>
+    <sup><a href="" class="change">change</a></sup>
+  </td>
+  <td>
+    <%= entry.memo %>
+  </td>
+</tr>
+

@@ -22,6 +22,10 @@ groceries:
   type: Expense
   name: Groceries
   user: andy
+household:
+  type: Expense
+  name: Household
+  user: andy
 insurance:
   type: Expense
   name: Insurance

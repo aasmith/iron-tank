@@ -100,7 +100,7 @@ class EntryTest < ActiveSupport::TestCase
   end
 
   test "finds dopplegangers given an existing entry" do
-    e = users(:andy).entries.expenses.first
+    e = entries(:pay_cc)
     e.posted = 2.days.ago
     e.save!
 
@@ -182,18 +182,6 @@ class EntryTest < ActiveSupport::TestCase
     assert e.splits.any?{|s|s.ledger == cc}
     assert d.splits.any?{|s|s.ledger == ck}
     assert d.splits.any?{|s|s.ledger == cc}
-  end
-
-  test "remote_ledgers never returns Accounts" do
-    Entry.all.each do |entry|
-      entry.remote_ledgers.each{|lg| assert_not_equal Account, lg.class }
-    end
-  end
-
-  test "remote_ledgers returns empty array for transfers" do
-    Entry.all.each do |entry|
-      assert entry.remote_ledgers.empty? if entry.transfer?
-    end
   end
 
   test "remote_ledgers return Expenses or Categories for everything else" do

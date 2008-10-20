@@ -105,23 +105,19 @@ class Entry < ActiveRecord::Base
   # and Checking, would return the Groceries ledger. Transfers return
   # an empty array.
   def remote_ledgers
-    mappings = {
-      "transfer" => [], 
-      "income"   => :debits, 
-      "expense"  => :credits, 
-      "refund"   => :debits }
+    remote_splits.collect(&:ledger)
+  end
 
-    mappings.each do |entry_type, result|
-      next unless entry_type() == entry_type
+  def local_ledgers
+    local_splits.collect(&:ledger)
+  end
 
-      if result.is_a?(Symbol)
-        return send(result).collect(&:ledger)
-      else
-        return result
-      end
-    end
+  def remote_splits
+    income? || refund? ? debits : credits
+  end
 
-    raise "Unable to find remote ledgers"
+  def local_splits
+    income? || refund? ? credits : debits
   end
 
   protected

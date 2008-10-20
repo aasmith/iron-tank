@@ -1,8 +1,9 @@
-.expanded { display:none; line-height: 1.8em;}
+.expanded { display:none; line-height: 1.8em; overflow:hidden; }
 .expanded table { margin: 0; width: 100%; }
-.expanded table td {overflow:hidden; white-space:nowrap;}
-.expanded table tr > td:first-child { padding-left:20px;font-weight: bold; width: 20%;}
-.expanded table tr > td:last-child { text-align:right; }
+.expanded table td {overflow:hidden; white-space:nowrap; width: auto;}
+.expanded table td.money { padding-left:20px; }
+.expanded table tr > td:last-child { color: #c9c9c9; }
+.expanded thead { font-size: 0.8em; line-height: 0.9em; color: #c9c9c9; }
 
 .category {line-height: 2em;}
 .category .chart { width: 30%; float: left; } /* !wk-hack */
@@ -21,15 +22,6 @@
 
 .unchanged { color: #909090; }
 .unchanged:after { content: "No change"}
-
-
-.action {
-  background-color:#EDCDCB;
-  border-color:#C05046;
-  font-size: 1.1em;
-  font-weight: bold;
-  line-height: 1.3em;
-}
 
 
 .date-range {
@@ -54,4 +46,22 @@
 .transaction .date {width: 30%; float: left;}
 .transaction .categories {width: 50%; float: left; white-space: nowrap; overflow: hidden; text-align:right;}
 
+#change-warning { display: none; font-size: 1em; }
 
+.entry-edit td {
+  padding: 5px ;
+  border-top: 1px solid #d9d9d9; 
+  border-bottom: 1px solid #d9d9d9;
+  /* background-color:#d9d9d9; */
+}
+
+.entry-edit .more-or-less {
+  line-height: 1.2em;
+  padding-bottom: 5px;
+}
+
+.entry-edit a.more, .entry-edit a.less {
+  font-size: 0.85em; 
+}
+
+.entry-edit select { margin: 5px 2px; }

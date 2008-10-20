@@ -52,3 +52,23 @@ body { margin: 40px 40px; width: 90%;} /* !wk-hack */
   margin:10px 5px;
 }
 
+.action {
+  background-color:#EDCDCB;
+  border-color:#C05046;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1.3em;
+}
+
+.info {
+  background-color:#FACCA7;
+  border-color:#F28226;
+  font-size: 1.1em;
+  line-height: 1.3em;
+}
+
+.money.transfer{}
+.money.expense{font-weight:bold;color:#BF0C00;}
+.money.income{font-weight:bold;color:#7DB700;}
+.money.refund{font-weight:bold;color:#7DB700;}
+

@@ -1,7 +1,6 @@
 module DashboardHelper
   def summarize_ledgers(ledgers)
     summary = ledgers.collect do |array_of_ledgers|
-      next ["Transfer"] if array_of_ledgers.empty?
       array_of_ledgers.map(&:name)
     end.flatten.uniq
     
@@ -15,19 +14,24 @@ module DashboardHelper
     entry.credits.sum(&:amount).format
   end
 
-  def summarize_entry_type(entry)
-    [entry.entry_type.capitalize, 
-      if entry.transfer?
-        ["from", entry.ledgers.debits.map(&:name), 
-         "to", entry.ledgers.credits.map(&:name)]
-      else
-        if entry.income? || entry.refund? || entry.transfer?
-          ["to", entry.ledgers.credits.map(&:name)]
-        else
-          ["from", entry.ledgers.debits.map(&:name)]
-        end
-      end
-    ].join(" ")
+  def net_gain(entries)
+    exp = entries.select(&:expense?)
+    inc = entries.select{|e| e.refund? || e.income? }
+
+    exp.map(&:debits).flatten.sum(&:amount).to_money +
+    inc.map(&:credits).flatten.sum(&:amount).to_money
+  end
+
+  def ledger_selection_for_splits(splits)
+    splits.collect do |split|
+      s = []
+      s << select_tag("split[#{split.id}][ledger_id]", 
+                      options_for_select(
+                        Ledger.all.map{|e|[e.name,e.id]}, split.ledger.id))
+      s << split.amount.format if splits.size > 1
+      s.join
+      content_tag "div", s, :class => "split"
+    end
   end
 
 end
