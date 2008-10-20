@@ -13,7 +13,13 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
   
-  before_filter :load_user
+  before_filter :load_user, :init_stylesheets
+
+  protected
+
+  def init_stylesheets
+    @stylesheets ||= []
+  end
 
   # TODO: unstub this.
   def load_user
