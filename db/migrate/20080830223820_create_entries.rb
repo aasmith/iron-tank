@@ -5,7 +5,6 @@ class CreateEntries < ActiveRecord::Migration
       t.string  :entry_type
       t.date    :posted
       t.string  :memo
-      t.boolean :approved, :default => false
 
       t.timestamps
     end

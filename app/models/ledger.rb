@@ -15,9 +15,8 @@ class Ledger < ActiveRecord::Base
     named_scope t.to_sym, :conditions => {:type => t.classify}
   end
 
-  named_scope :approved_entries_since, lambda { |date|
-    { :conditions => ["entries.posted > ? AND 
-                       entries.approved = ?", date, true], 
+  named_scope :entries_since, lambda { |date|
+    { :conditions => ["entries.posted > ? ", date], 
       :include => :entries }
   }
 

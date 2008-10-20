@@ -3,34 +3,28 @@ older_weekly_grocery:
   entry_type: expense
   posted: <%= 10.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
 recent_weekly_grocery:
   memo: $LABEL
   entry_type: expense
   posted: <%= 3.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
 payday:
   memo: $LABEL
   entry_type: income
   posted: <%= 14.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
 rainy_day:
   memo: $LABEL
   entry_type: transfer
   posted: <%= 5.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
 pay_cc:
   memo: $LABEL
   entry_type: transfer
   posted: <%= 10.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
 refund:
   memo: $LABEL
   entry_type: refund
   posted: <%= 1.days.ago.to_date.to_s(:db) %>
   user: andy
-  approved: true
