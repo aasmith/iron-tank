@@ -6,7 +6,7 @@
     <%= "from" if entry.transfer? %>
     <%= entry.local_ledgers.map(&:name).join(", ") %>
   </td>
-  <td>
+  <td class="editable">
     <%= "to" if entry.transfer? %>
     <%= entry.remote_ledgers.map(&:name).join(", ") %>
     <%= "(refund)" if entry.refund? %>

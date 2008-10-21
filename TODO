@@ -18,6 +18,8 @@ iron-tank:
    in regular outgoings. Entries between two accounts remain the same 
    (i.e transfer).
 
+ - fix td alignment issue in webkit when doing inline ledger editing
+
 3rd parties:
 
  - flot

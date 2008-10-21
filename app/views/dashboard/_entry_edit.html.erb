@@ -1,5 +1,4 @@
 <tr id="entry-edit-<%=entry.id%>" class="entry-edit">
-  <% form_remote_tag :url => { :action => :edit_split_ledgers } do %>
     <td class="money <%=entry.entry_type%>">
       <%= summarize_entry_amount(entry) %>
     </td>
@@ -7,14 +6,15 @@
       <%= entry.local_ledgers.map(&:name).join(", ") %>
     </td>
     <td>
-      <%= ledger_selection_for_splits(entry.remote_splits) %>
-      <%= hidden_field_tag "entry_id", entry.id %>
-      <%= submit_tag "Save" %>
-      <%= submit_tag "Cancel", :type => :reset %>
+      <% form_remote_tag :url => { :action => :edit_split_ledgers } do %>
+        <%= ledger_selection_for_splits(entry.remote_splits) %>
+        <%= hidden_field_tag "entry_id", entry.id %>
+        <%= submit_tag "Save" %>
+        <%= submit_tag "Cancel", :type => :reset %>
+      <% end %>
       <div>or <a href="">edit in more detail</a></div>
     </td>
     <td>
       <%= entry.memo %>
     </td>
-  <% end %>
 </tr>

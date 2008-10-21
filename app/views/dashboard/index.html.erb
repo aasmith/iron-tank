@@ -142,13 +142,16 @@ $(function () {
 });
 
 $(["transaction", "category"]).each(function(idx, className) {
-  $("."+className+":not(.remaining) div:not(.expanded)").css({cursor:'pointer'});
+  $("."+className+":not(.remaining) div:not(.expanded)").
+    css({cursor:'pointer'});
 
   $("."+className+" div:not(.expanded)").click(
     function(){
       var h = $("~ .expanded:hidden", this);
       var v = $("~ .expanded:visible", this);
-      h.size() == 1 ? h.slideDown(500) : v.slideUp(500);
+      h.size() == 1 ? 
+        h.animate({height:"show"}, 250, "easeInOutExpo") :
+        v.animate({height:"hide"}, 250, "easeInOutExpo") ;
     }
   )
 });
@@ -157,16 +160,19 @@ $(["transaction", "category"]).each(function(idx, className) {
 function initLedgerSelectors() {
   $(".entry-edit").hide();
   $(".entry sup a").css({visibility:'hidden'});
-  $(".entry td").hover(
+
+  $(".entry .editable").hover(
     function(){$("a.change", this).css({visibility:'visible'})},
     function(){$("a.change", this).css({visibility:'hidden'})}
   );
   
-  $(".entry a.change").click(function(){
+  $(".entry .editable").click(function(){
     $(this).parents(".entry").hide();
     $(this).parents(".entry").next().fadeIn(100);
     return false;
   });
+  
+  $(".entry .editable").css({cursor:'pointer'});
   
   $(".entry-edit input[type=reset]").click(function(){
     $(this).parents(".entry-edit").hide();
