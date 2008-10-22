@@ -20,6 +20,17 @@ iron-tank:
 
  - fix td alignment issue in webkit when doing inline ledger editing
 
+ - make 'Unknown' appear in the Recent Transactions shortlists if it is 
+   present for the given block.
+
+ - charts, amount over/under trending
+
+ - account fetch ui
+
+ - entry editing, ledger creation
+
+ - 'blank slate' scenario: account setup, etc.
+
 3rd parties:
 
  - flot
