@@ -49,19 +49,10 @@
 #change-warning { display: none; font-size: 1em; }
 
 .entry-edit td {
-  padding: 5px ;
   border-top: 1px solid #d9d9d9; 
   border-bottom: 1px solid #d9d9d9;
-  /* background-color:#d9d9d9; */
 }
 
-.entry-edit .more-or-less {
-  line-height: 1.2em;
-  padding-bottom: 5px;
-}
-
-.entry-edit a.more, .entry-edit a.less {
-  font-size: 0.85em; 
-}
+.entry-edit:last-child td {border-bottom:none;}
 
 .entry-edit select { margin: 5px 2px; }
