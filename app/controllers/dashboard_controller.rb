@@ -5,7 +5,10 @@ class DashboardController < ApplicationController
 
     build_date_selection_range
 
-    @expenses = @user.ledgers.expenses.entries_since(@start_date)
+    @expenses = 
+      @user.ledgers.expenses.entries_since(@start_date).collect do |expense|
+        [expense, expense.splits.since(@start_date)]
+      end
 
     @period = @current_days > 14 ? :weekly : :daily
 

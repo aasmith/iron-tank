@@ -1,6 +1,5 @@
 <div id="categories">
-  <% @expenses.each do |expense| %>
-    <% splits = expense.splits.since(@start_date) %>
+  <% @expenses.each do |expense, splits| %>
     <div class="category box">
       <div class="chart">...</div>
       <div class="spend">
@@ -17,7 +16,7 @@
           <% splits.each do |split| %>
           <tr>
             <td><%= split.amount.format %></td>
-            <td>from <%= split.ledger.name %></td>
+            <td>from <%= split.entry.local_ledgers.map(&:name).join(", ") %></td>
             <td><%= pretty_date(split.entry.posted) %></td>
           </tr>
         <% end %>

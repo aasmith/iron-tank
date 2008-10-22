@@ -32,4 +32,15 @@ class DashboardControllerTest < ActionController::TestCase
     assert_equal [7, 30, 60, 180], assigns("days")
   end
 
+  test "expenses summarize only entries in recent transactions" do
+    get :index, :days => 7
+
+    entries = assigns("daily_entries").values.flatten
+    ledgers = assigns("expenses").collect(&:first)
+
+    a = ledgers.map(&:name) - entries.collect{|e|e.ledgers}.flatten.map(&:name)
+
+    assert a.empty?
+  end
+
 end
