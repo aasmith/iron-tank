@@ -27,7 +27,7 @@ module DashboardHelper
       s = []
       s << select_tag("split[#{split.id}][ledger_id]", 
                       options_for_select(
-                        Ledger.all.map{|e|[e.name,e.id]}, split.ledger.id))
+                        @user.ledgers.map{|e|[e.name,e.id]}, split.ledger.id))
       s << split.amount.format if splits.size > 1
       s.join
       content_tag "div", s, :class => "split"
