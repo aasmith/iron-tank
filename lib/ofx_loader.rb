@@ -2,6 +2,8 @@ class OfxLoader
   class << self
     def load_ofx!(user, raw_ofx)
       parsed_ofx = OfxParser::OfxParser.parse(raw_ofx) or raise OfxParserError
+      raise "blank ofx" if parsed_ofx.blank?
+
       ledger = find_ledger(user, parsed_ofx)
       
       ofx_account = parsed_ofx.accounts.first
