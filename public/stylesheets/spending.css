@@ -20,3 +20,12 @@
 .transaction .date {width: 30%; float: left;}
 .transaction .categories {width: 50%; float: left; white-space: nowrap; overflow: hidden; text-align:right;}
 
+
+.entry-edit td {
+  border-top: 1px solid #d9d9d9; 
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.entry-edit:last-child td {border-bottom:none;}
+
+.entry-edit select { margin: 5px 2px; }

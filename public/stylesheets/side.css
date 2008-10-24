@@ -1,0 +1,15 @@
+.date-range {
+  text-align:center;
+  line-height: 1.6em;
+  padding: 10px;
+}
+.date-range {font-size: 1.1em;}
+.date-range strong { font-weight: bold; font-size: 1.5em}
+.date-range p + p { font-weight: bold; }
+.date-range a { padding: 0px 0.2em; font-weight: normal;}
+
+.delta { padding: 5px 0; text-align:center;}
+.delta h2 { padding:6px; }
+.delta .plot {height: 60px; padding: 5px;} /* !wk-hack */
+.delta table {margin-left:auto; margin-right:auto; border-spacing:10px;line-height:1em;} /* !wk-hack */
+

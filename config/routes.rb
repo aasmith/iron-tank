@@ -39,15 +39,10 @@ ActionController::Routing::Routes.draw do |map|
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
 
-  map.dashboard 'dashboard/:days', 
-    :controller => 'dashboard', :action => 'index',
+  map.connect 'spending/:action/:days',
+    :controller   => 'spending',
     :requirements => {:days => /\d+/},
-    :defaults => { :days => 30 }
-
-  map.connect 'dashboard/index/:days',
-    :controller => 'dashboard', :action => 'index',
-    :requirements => {:days => /\d+/},
-    :defaults => { :days => 30 }
+    :defaults     => { :days => 30 }
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

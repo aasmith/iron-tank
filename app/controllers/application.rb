@@ -19,6 +19,11 @@ class ApplicationController < ActionController::Base
 
   def init_stylesheets
     @stylesheets ||= []
+    @stylesheets << controller_name if css_exists?(controller_name)
+  end
+
+  def css_exists?(filename)
+    File.exists?(File.join(RAILS_ROOT, "public", "stylesheets", "#{filename}.css"))
   end
 
   # TODO: unstub this.

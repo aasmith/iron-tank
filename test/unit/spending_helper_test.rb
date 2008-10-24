@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class DashboardHelperTest < ActionView::TestCase
-  tests DashboardHelper
+class SpendingHelperTest < ActionView::TestCase
+  tests SpendingHelper
 
   test "summarize_ledgers" do
     array = [

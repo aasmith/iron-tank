@@ -72,3 +72,13 @@ body { margin: 40px 40px; width: 90%;} /* !wk-hack */
 .money.income{font-weight:bold;color:#7DB700;}
 .money.refund{font-weight:bold;color:#7DB700;}
 
+.over { color: #9D3D35; }
+.over:after { content: " over"}
+
+.under { color: #9DBB61; }
+.under:after { content: " saved"}
+
+.unchanged { color: #909090; }
+.unchanged:after { content: "No change"}
+
+

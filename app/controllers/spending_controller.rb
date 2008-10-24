@@ -1,15 +1,15 @@
-class DashboardController < ApplicationController
-  def index
-    @current_days = params[:days].to_i
-    @start_date = @current_days.days.ago
+class SpendingController < ApplicationController
 
-    build_date_selection_range
+  before_filter :init_day_params, :only => [:category, :day]
 
+  def category
     @expenses = 
       @user.ledgers.expenses.entries_since(@start_date).collect do |expense|
         [expense, expense.splits.since(@start_date)]
       end
+  end
 
+  def day
     @period = @current_days > 14 ? :weekly : :daily
 
     @daily_entries = 
@@ -34,16 +34,19 @@ class DashboardController < ApplicationController
     render(:update) do |page|
       page["entry-#{entry.id}"].replace :partial => "entry", :object => entry
       page["entry-edit#{entry.id}"].replace :partial => "entry", :locals => {:entry => entry}
-      #page["entry-#{entry.id}"].visual_effect :highlight
-      page["change-warning"].fade_in
+      page["entry-#{entry.id}"].visual_effect :highlight
       page.call 'initLedgerSelectors'
     end
   end
 
   private
 
-  def build_date_selection_range
+  def init_day_params
+    @current_days = params[:days].to_i
+    @start_date = @current_days.days.ago
+
     @days = [7, 30, 60, 180]
     (@days << @current_days).sort! unless @days.include?(@current_days)
   end
+
 end

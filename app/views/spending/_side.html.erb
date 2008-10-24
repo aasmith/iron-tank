@@ -1,0 +1,60 @@
+<% @stylesheets << "side" %>
+
+<div id="side">
+  <!--<div class="action box">
+    <p><a href="http://someplace">Approve</a> 3 new transactions</p>
+    <p><a href="http://someplace">Categorize</a> 9 transactions</p>
+  </div>-->
+
+  <div class="date-range box">
+    <p>Showing data for</p>
+    <p>Last
+      <% @days.each do |d| %>
+        <% if @current_days == d %>
+          <strong><%= d %></strong>
+        <% else %>
+          <%= link_to d, {:days => d} %>
+        <% end %>
+      <% end %>
+      days
+    </p>
+  </div>
+
+  <div class="delta box">
+    <h2 class="over">$4,032</h2>
+    <div class="plot" id="hh">dd</div>
+    <table><tbody>
+      <tr><td>Earned</td><td>$4,530</td></tr>
+      <tr><td>Spent</td><td>$8,562</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+$(function () {
+    var deltas = [[0, 1010], [1,893], [2,1434], [3,1204], [4,-200], [5,800], [6,-389], [7,297], [8,-581], [9,-904], [10,102], [11,-783]].reverse();
+    var origin = 0; // draw this as an actual line and it makes the graph slightly wider, so the border doesnt intrude.
+
+    var options = {
+      shadowSize: 0,
+      grid: { borderWidth: 0 },
+      yaxis: {ticks: []},
+      xaxis: {ticks: []}
+    };
+    options['colors'] = jQuery.map(deltas, function(e) { return e[1] == 0 ? 'transparent' : (e[1] < 0 ? '#BF0C00' : '#7DB700') } );
+    options['colors'].push('black'); // origin color
+
+    var plotArray = jQuery.map(deltas, function(e) { return {data: [e], bars: { align: 'center', show: true, barWidth: 0.8 }} } );
+    plotArray.push({data: [[0, origin],[deltas.length, origin]], lines: { show: true, lineWidth: 0.5 } });
+
+    jQuery.plot($("#hh"), plotArray, options);
+
+    $(window).resize(function(){
+      jQuery.plot($("#hh"), plotArray, options);
+    });
+
+});
+
+</script>
+

@@ -1,4 +1,4 @@
-module DashboardHelper
+module SpendingHelper
   def summarize_ledgers(ledgers)
     summary = ledgers.collect do |array_of_ledgers|
       array_of_ledgers.map(&:name)
@@ -33,5 +33,4 @@ module DashboardHelper
       content_tag "div", s, :class => "split"
     end
   end
-
 end
