@@ -1,6 +1,7 @@
 class SpendingController < ApplicationController
 
   before_filter :init_day_params, :only => [:category, :day]
+  helper_method :weekly?, :daily?
 
   def category
     @expenses = 
@@ -10,11 +11,9 @@ class SpendingController < ApplicationController
   end
 
   def day
-    @period = @current_days > 14 ? :weekly : :daily
-
     @daily_entries = 
       @user.entries.since(@start_date).group_by do |e|
-        @period == :weekly ? e.posted.beginning_of_week : e.posted
+        weekly? ? e.posted.beginning_of_week : e.posted
       end
   end
 
@@ -39,6 +38,16 @@ class SpendingController < ApplicationController
     end
   end
 
+  protected
+
+  def weekly?
+    @period == :weekly
+  end
+
+  def daily?
+    !weekly?
+  end
+
   private
 
   def init_day_params
@@ -47,6 +56,8 @@ class SpendingController < ApplicationController
 
     @days = [7, 30, 60, 180]
     (@days << @current_days).sort! unless @days.include?(@current_days)
+    
+    @period = @current_days > 14 ? :weekly : :daily
   end
 
 end

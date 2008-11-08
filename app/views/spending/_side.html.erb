@@ -18,6 +18,14 @@
       <% end %>
       days
     </p>
+    <p>
+    by 
+      <% bolden_unselected = lambda{|t| content_tag("strong", t) } %>
+      <%= link_to_unless_current weekly? ? "Week" : "Day" , 
+        {:action => "day", :days => @current_days}, &bolden_unselected %>
+      <%= link_to_unless_current "Category", 
+        {:action => "category", :days => @current_days }, &bolden_unselected %>
+    </p>
   </div>
 
   <div class="delta box">
