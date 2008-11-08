@@ -1,8 +1,9 @@
 <div id="main">
   <% @daily_entries.each do |date, entries| %>
     <div class="transaction box">
-      <div class="amount">
-        <%= net_gain(entries).format %>
+      <% amount = net_gain(entries) %>
+      <div class="amount <%= amount.cents > 0 ? 'income' : 'expense' %>">
+        <%= Money.new(amount.cents.abs).format %>
       </div>
       <div class="date">
         <%= @period == :weekly ? "Week of" : "" %>
