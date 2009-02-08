@@ -1,3 +1,21 @@
+# == Schema Information
+# Schema version: 20080904073207
+#
+# Table name: ledgers
+#
+#  id             :integer         not null, primary key
+#  type           :string(255)
+#  name           :string(255)
+#  user_id        :integer
+#  fid            :string(255)
+#  institution    :string(255)
+#  account_number :string(255)
+#  routing_number :string(255)
+#  credentials    :text
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+
 # An account represents a physical ledger that can send and receive payments,
 # for example, checking, savings, credit card. For simpler accounts, such as 
 # installment loans, use a Category instead.

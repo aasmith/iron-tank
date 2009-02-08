@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20080904073207
+#
+# Table name: splits
+#
+#  id         :integer         not null, primary key
+#  entry_id   :integer
+#  ledger_id  :integer
+#  amount     :integer
+#  fit        :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Split < ActiveRecord::Base
   belongs_to :entry
   belongs_to :ledger

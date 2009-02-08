@@ -1,3 +1,18 @@
+# == Schema Information
+# Schema version: 20080904073207
+#
+# Table name: entries
+#
+#  id         :integer         not null, primary key
+#  user_id    :integer
+#  entry_type :string(255)
+#  posted     :date
+#  memo       :string(255)
+#  approved   :boolean
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Entry < ActiveRecord::Base
   belongs_to :user
   has_many :splits

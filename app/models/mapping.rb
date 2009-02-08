@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 20080904073207
+#
+# Table name: mappings
+#
+#  id         :integer         not null, primary key
+#  ledger_id  :integer
+#  condition  :string(255)
+#  value      :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Mapping < ActiveRecord::Base
   EQUALS = "equals".freeze
   BEGINS = "begins".freeze
