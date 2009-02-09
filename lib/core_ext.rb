@@ -1,6 +1,6 @@
 class Fixnum
   def oppose
-    self - (self * 2)
+    -self
   end
 end
 
