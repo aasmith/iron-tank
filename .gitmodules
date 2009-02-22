@@ -1,9 +1,12 @@
 [submodule "vendor/rails"]
 	path = vendor/rails
 	url = git://github.com/rails/rails.git
-[submodule "vendor/ofx-parser"]
-	path = vendor/ofx-parser
-	url = git@github.com:aasmith/ofx-parser.git
 [submodule "vendor/plugins/sentry"]
 	path = vendor/plugins/sentry
 	url = git://github.com/aasmith/sentry.git
+[submodule "vendor/ofx-parser"]
+	path = vendor/ofx-parser
+	url = git://github.com/aasmith/ofx-parser.git
+[submodule "vendor/yodlee"]
+	path = vendor/yodlee
+	url = git://github.com/aasmith/yodlee.git
