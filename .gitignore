@@ -2,9 +2,10 @@ log/*.log
 tmp/**/*
 config/database.yml
 .DS_Store
-doc 
 db/*.sqlite3
 db/schema.rb
 coverage
 *.swp
-
+tags
+Session.vim
+doc/
