@@ -38,13 +38,14 @@ class Entry < ActiveRecord::Base
     self[:posted] = date.to_date if date
   end
 
+  # Finds an Entry with the same amount, regardless of sign, 
+  # within +/- 3 days of the current Entry.
   def doppleganger
     user.entries.find(:first, :include => :splits, 
       :conditions => [ "entries.posted < ? AND entries.posted > ?
-        AND entries.id != ?  AND (splits.amount = ? OR splits.amount = ?)",
+        AND entries.id != ?  AND ABS(splits.amount) = ?",
       posted + 3.days, posted - 3.days, id,
-      credits.sum(&:amount).cents, 
-      credits.sum(&:amount).cents.oppose 
+      credits.sum(&:amount).cents
     ])
   end
 
@@ -52,6 +53,15 @@ class Entry < ActiveRecord::Base
     ([entry_type, other_entry.entry_type] & %w(expense income)).size == 2
   end
 
+  # Joins entries:
+  #  Entry(from "Checking", to "ELECTRONIC WITHDRAWL")
+  # and
+  #  Entry(from "PAYMENT RECEIVED", to "Credit Card")
+  #
+  # to make:
+  #
+  # Entry(from "Checking", to "Credit Card")
+  #
   def join!(other_entry)
     raise "Cannot be joined" unless joinable?(other_entry)
 
