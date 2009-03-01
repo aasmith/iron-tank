@@ -5,7 +5,7 @@ class SpendingController < ApplicationController
 
   def category
     @expenses = 
-      @user.ledgers.expenses.entries_since(@start_date).collect do |expense|
+      @user.expenses.entries_since(@start_date).collect do |expense|
         [expense, expense.splits.since(@start_date)]
       end
   end

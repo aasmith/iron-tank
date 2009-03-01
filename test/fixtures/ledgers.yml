@@ -17,22 +17,18 @@ checking:
   type: Account
   name: Checking
   user: andy
-  fid: 123
-  account_number: "0123456"
-  routing_number: "003300"
+  keychain: andy_yodlee
+  external_id: yod-bank-chk-1234
 savings:
   type: Account
   name: Savings
   user: andy
-  fid: 456
-  account_number: 0123456789
-  routing_number: 004400
+  keychain: andy_yodlee
+  external_id: yod-bank-sav-5678
 credit_card:
   type: Account
   name: Credit Card
   user: andy
-  fid: 789
-  account_number: XXXXXXXXXXXX1111
 groceries:
   type: Expense
   name: Groceries

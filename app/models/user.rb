@@ -11,6 +11,12 @@
 
 class User < ActiveRecord::Base
   has_many :ledgers
+  
+  %w(accounts categories expenses).each do |t|
+    has_many t.to_sym, :conditions => { :type => t.classify }
+  end
+
+  has_many :keychains
 
   has_many :mappings, :through => :ledgers
   has_many :splits, :through => :ledgers

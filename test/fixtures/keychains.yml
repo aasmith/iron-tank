@@ -1,0 +1,18 @@
+# == Schema Information
+# Schema version: 20090227093920
+#
+# Table name: keychains
+#
+#  id              :integer         not null, primary key
+#  user_id         :integer
+#  crypted_details :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
+andy_yodlee:
+  user: andy
+  crypted_details: 
+andy_foo_bank:
+  user: andy
+  crypted_details: 

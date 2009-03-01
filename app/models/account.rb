@@ -17,35 +17,15 @@
 # for example, checking, savings, credit card. For simpler accounts, such as 
 # installment loans, use a Category instead.
 class Account < Ledger
-  serialize :credentials
-  before_save :encrypt
-
-  def after_find; decrypt_or_initialize; end
-  def after_save; decrypt_or_initialize; end
-
-  def after_initialize
-    if new_record?
-      self.credentials = Hash.new
-    end
-  end
 
   def fetch!
-    fetcher_class = Fetcher.resolve(:institution => institution)
-    fetcher = fetcher_class.new(self)
-    OfxLoader.load_ofx!(user, fetcher.fetch_ofx) # parse and create entries
-  end
+    return unless keychain
 
-  def encrypt
-    s = Sentry::SymmetricSentry.new
-    self.credentials = s.encrypt_to_base64(credentials.to_yaml)
-  end
+    fetcher = "fetcher/#{adapter.fetcher}".camelize.constantize.new(keychain.details, external_id)
+    account_transactions = fetcher.fetch
 
-  def decrypt_or_initialize
-    s = Sentry::SymmetricSentry.new
-
-    write_attribute("credentials", (credentials ?
-      YAML.load(s.decrypt_from_base64(
-        read_attribute_before_type_cast("credentials"))) : Hash.new ))
+    loader = "loader/#{adapter.loader}".camelize.constantize.new(self)
+    loader.load!(account_transactions)
   end
 
 end

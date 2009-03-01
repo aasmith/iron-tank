@@ -25,10 +25,17 @@ class Ledger < ActiveRecord::Base
   has_many :entries, :through => :splits
   has_many :mappings
   belongs_to :user
+  belongs_to :keychain
 
-  %w(accounts categories expenses).each do |t|
-    named_scope t.to_sym, :conditions => {:type => t.classify}
-  end
+  # Avoid using this named_scope because it points to STI
+  # subclasses, which break when using create, etc.:
+  #
+  # Consider: @user.ledgers.expenses.create!(...).class
+  # Expect: Expense, got Ledger.
+  #
+  # %w(accounts categories expenses).each do |t|
+  #   named_scope t.to_sym, :conditions => {:type => t.classify}
+  # end
 
   named_scope :entries_since, lambda { |date|
     { :conditions => ["entries.posted > ? ", date], 

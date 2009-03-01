@@ -1,0 +1,22 @@
+# == Schema Information
+# Schema version: 20090227093920
+#
+# Table name: adapters
+#
+#  id         :integer         not null, primary key
+#  fetcher    :string(255)
+#  loader     :string(255)
+#  name       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
+yodlee:
+  fetcher: yodlee
+  loader: yodlee
+  name: Yodlee
+
+us_bank:
+  fetcher: us_bank
+  loader: ofx
+  name: US Bank
