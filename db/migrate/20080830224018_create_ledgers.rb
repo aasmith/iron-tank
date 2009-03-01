@@ -5,14 +5,12 @@ class CreateLedgers < ActiveRecord::Migration
       t.string :name
 
       t.integer :user_id
+      t.integer :keychain_id
 
-      # OFX fields: financial institute id, acct num, routing num
-      t.string :fid
-      t.string :institution
-      t.string :account_number
-      t.string :routing_number
-
-      t.text :credentials
+      # The unique ID used by the remote finanical 
+      # institution that identifies this account.
+      # Supplements the user's keychain data.
+      t.string :external_id
 
       t.timestamps
     end

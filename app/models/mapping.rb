@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20080904073207
+# Schema version: 20090227093920
 #
 # Table name: mappings
 #

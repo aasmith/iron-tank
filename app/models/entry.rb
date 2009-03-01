@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20080904073207
+# Schema version: 20090227093920
 #
 # Table name: entries
 #
@@ -8,7 +8,6 @@
 #  entry_type :string(255)
 #  posted     :date
 #  memo       :string(255)
-#  approved   :boolean
 #  created_at :datetime
 #  updated_at :datetime
 #
