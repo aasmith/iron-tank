@@ -7,6 +7,3 @@
 [submodule "vendor/ofx-parser"]
 	path = vendor/ofx-parser
 	url = git://github.com/aasmith/ofx-parser.git
-[submodule "vendor/yodlee"]
-	path = vendor/yodlee
-	url = git://github.com/aasmith/yodlee.git
