@@ -19,6 +19,7 @@ checking:
   name: Checking
   user: andy
   keychain: andy_yodlee
+  adapter: yodlee
   external_id: yod-bank-chk-1234
 savings:
   type: Account
