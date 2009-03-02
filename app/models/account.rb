@@ -19,10 +19,9 @@
 # installment loans, use a Category instead.
 class Account < Ledger
 
-  def fetch!
-    return unless keychain
-
-    fetcher = adapter.fetcher_class.new(keychain.details, external_id)
+  def fetch!(details)
+    fetcher = adapter.fetcher_class.new(details, external_id)
+    details = nil
     account_transactions = fetcher.fetch
 
     converter = adapter.converter_class
