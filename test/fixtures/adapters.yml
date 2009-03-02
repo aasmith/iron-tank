@@ -5,7 +5,7 @@
 #
 #  id         :integer         not null, primary key
 #  fetcher    :string(255)
-#  loader     :string(255)
+#  converter  :string(255)
 #  name       :string(255)
 #  created_at :datetime
 #  updated_at :datetime
@@ -13,10 +13,10 @@
 
 yodlee:
   fetcher: yodlee
-  loader: yodlee
+  converter: yodlee
   name: Yodlee
 
 us_bank:
   fetcher: us_bank
-  loader: ofx
+  converter: ofx
   name: US Bank

@@ -8,6 +8,7 @@
 #  name        :string(255)
 #  user_id     :integer
 #  keychain_id :integer
+#  adapter_id  :integer
 #  external_id :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
@@ -26,6 +27,7 @@ class Ledger < ActiveRecord::Base
   has_many :mappings
   belongs_to :user
   belongs_to :keychain
+  belongs_to :adapter
 
   # Avoid using this named_scope because it points to STI
   # subclasses, which break when using create, etc.:

@@ -8,6 +8,7 @@
 #  name        :string(255)
 #  user_id     :integer
 #  keychain_id :integer
+#  adapter_id  :integer
 #  external_id :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
@@ -21,11 +22,14 @@ class Account < Ledger
   def fetch!
     return unless keychain
 
-    fetcher = "fetcher/#{adapter.fetcher}".camelize.constantize.new(keychain.details, external_id)
+    fetcher = adapter.fetcher_class.new(keychain.details, external_id)
     account_transactions = fetcher.fetch
 
-    loader = "loader/#{adapter.loader}".camelize.constantize.new(self)
-    loader.load!(account_transactions)
+    converter = adapter.converter_class
+    transactions = converter.convert(account_transactions)
+
+    loader = Loader.new(self)
+    loader.load!(transactions)
   end
 
 end

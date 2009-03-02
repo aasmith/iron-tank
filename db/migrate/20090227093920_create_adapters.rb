@@ -2,7 +2,7 @@ class CreateAdapters < ActiveRecord::Migration
   def self.up
     create_table :adapters do |t|
       t.string :fetcher
-      t.string :loader
+      t.string :converter
       t.string :name
 
       t.timestamps

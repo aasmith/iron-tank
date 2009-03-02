@@ -6,6 +6,7 @@ class CreateLedgers < ActiveRecord::Migration
 
       t.integer :user_id
       t.integer :keychain_id
+      t.integer :adapter_id
 
       # The unique ID used by the remote finanical 
       # institution that identifies this account.

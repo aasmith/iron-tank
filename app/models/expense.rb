@@ -8,6 +8,7 @@
 #  name        :string(255)
 #  user_id     :integer
 #  keychain_id :integer
+#  adapter_id  :integer
 #  external_id :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
