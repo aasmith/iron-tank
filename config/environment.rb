@@ -72,4 +72,9 @@ end
 require 'vendor/ofx-parser/lib/ofx-parser'
 require 'lib/core_ext'
 
+# Add these explicitly so rcov can find them.
+require 'lib/loader'
+require 'lib/fetcher'
+require 'lib/converter'
+
 Sentry::SymmetricSentry.default_algorithm = 'aes-256-cbc'
