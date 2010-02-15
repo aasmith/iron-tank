@@ -1,0 +1,50 @@
+<div class="row" style="clear:both">
+
+  <% totals.zip(entries).every do |first, last, total, current_entries| %>
+    <% unless last %>
+      <div class="previous category box unselected">
+        <div class="title"><%= expense.name %></div>
+        <div class="spend"><%= total.format(:no_cents) %></div>
+        <div class="break"></div>
+        <div class="average">
+          <%= more_or_less(total, average) %> than average
+        </div>
+        <div class="expanded">
+          <ul>
+            <% current_entries.each do |entry| %>
+              <li><%= h(entry.memo) %> - <%= summarize_entry_amount(entry) %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% else %>
+      <div class="current category box selected">
+        <div class="title"><%= expense.name %></div>
+        <div class="spend"><%= total.format(:no_cents) %></div>
+        <div class="break"></div>
+        <div class="average">
+          <% pb_id = "pb-#{expense.id}" %>
+          <%= content_tag(:div, "", :class => "progress", :id => pb_id) %>
+          <script>
+            var pb = $('#<%= pb_id %>')
+            pb.data("values", {spent: <%= total.cents %>, average: <%= average.cents %>})
+          </script>
+        </div>
+        <div class="expanded">
+          <ul>
+            <% current_entries.each do |entry| %>
+              <li><%= h(entry.memo) %> - <%= summarize_entry_amount(entry) %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="summary box">
+    <div class="title">Average</div>
+    <div class="spend"><%= average.format(:no_cents) %></div>
+  </div>
+
+</div>
+

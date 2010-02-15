@@ -1,0 +1,6 @@
+<h2>Choose an Adapter / Account Provider</h2>
+<% Adapter.all.each do |adapter| %>
+  <ul>
+    <li><%= link_to adapter.name, {:id => adapter.id}, :method => :post %></li>
+  </ul>
+<% end %>

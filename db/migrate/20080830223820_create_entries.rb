@@ -5,6 +5,7 @@ class CreateEntries < ActiveRecord::Migration
       t.string  :entry_type
       t.date    :posted
       t.string  :memo
+      t.boolean :uncategorized
 
       t.timestamps
     end

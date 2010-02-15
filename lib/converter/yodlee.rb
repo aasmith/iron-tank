@@ -4,11 +4,12 @@ module Converter
       yodlee_transactions.map do |yt|
         t = Loader::Transaction.new
 
-        (t.members - %w(payee sic)).each do |attr|
+        (t.members - %w(amount payee sic)).each do |attr|
           t.send(:"#{attr}=", yt.send(attr))
         end
 
-        t.payee = yt.description
+        t.amount = yt.amount * 100
+        t.payee  = yt.description
 
         t
       end

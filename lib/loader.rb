@@ -14,9 +14,18 @@ class Loader
     # skip if this transaction's fit id matches any splits in the ledger
     return if @ledger.splits.exists?(:fit => transaction.fit_id)
 
-    # find or create the other ledger for this transaction
-    derived_ledger = @user.ledgers_by_alias!(
-      transaction.sic || transaction.payee)
+    if $VERBOSE
+      puts "-"*80
+      pp transaction
+    end
+
+    # the non-bang call may return nil if no suitable
+    # ledger is found
+    derived_ledger = @user.ledgers_by_alias(
+      transaction.sic || transaction.payee
+    )
+
+    derived_ledger ||= @user.unknown_ledger
 
     # create entry
     e = @user.entries.new(:posted => transaction.date)
@@ -33,6 +42,16 @@ class Loader
       :amount => Money.new(transaction.amount.oppose),
       :fit    => transaction.fit_id
     )
+
+    if $VERBOSE
+      pp e
+      pp e.splits
+    end
+
+    unless e.valid?
+      pp e.errors
+      return
+    end
 
     e.save!
 

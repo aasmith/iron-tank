@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: keychains
 #
@@ -8,6 +8,7 @@
 #  crypted_details :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  description     :string(255)
 #
 
 # A keychain is a collection of credentials that can be used to access
@@ -29,7 +30,7 @@
 # 
 # Keychain has details/crypted_details. Encrypted with a symmetric cipher
 # and the user's keychain password. Now the keychain password is available,
-# the details has can be decrypted and used for fetching bank transactions.
+# the details can be decrypted and used for fetching bank transactions.
 #
 class Keychain < ActiveRecord::Base
   has_many :ledgers

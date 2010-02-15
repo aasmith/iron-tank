@@ -3,8 +3,27 @@ module SpendingHelper
     summary = ledgers.collect do |array_of_ledgers|
       array_of_ledgers.map(&:name)
     end.flatten.uniq
-    
-    capped = summary.cap(3)
+
+    cap(summary, 3)
+  end
+
+  # returns an array of ledgers, ordered by highest to lowest spend
+  def summarize_ledgers_by_spending(entries)
+    ledger_spending = Hash.new(0)
+
+    entries.each do |entry|
+      next if entry.transfer?
+
+      entry.remote_splits.each do |split|
+        ledger_spending[split.ledger] += split.amount.cents.abs
+      end
+    end
+
+    cap(ledger_spending.sort_by(&:last).reverse.map(&:first).map(&:name), 5)
+  end
+
+  def cap(array, limit)
+    capped = array.cap(limit)
     capped[-1] = "#{capped[-1]} Others" if capped.last.is_a? Numeric
 
     capped.join(", ")
@@ -32,5 +51,12 @@ module SpendingHelper
       s.join
       content_tag "div", s, :class => "split"
     end
+  end
+
+  def more_or_less(value, baseline)
+    amount = Money.new((value.cents - baseline.cents).abs).format(:no_cents)
+    more_or_less = value > baseline ? "more" : "less"
+
+    content_tag(:span, "#{amount} #{more_or_less}", :class => more_or_less)
   end
 end

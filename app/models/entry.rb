@@ -1,15 +1,16 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: entries
 #
-#  id         :integer         not null, primary key
-#  user_id    :integer
-#  entry_type :string(255)
-#  posted     :date
-#  memo       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id            :integer         not null, primary key
+#  user_id       :integer
+#  entry_type    :string(255)
+#  posted        :date
+#  memo          :string(255)
+#  uncategorized :boolean
+#  created_at    :datetime
+#  updated_at    :datetime
 #
 
 class Entry < ActiveRecord::Base
@@ -21,18 +22,33 @@ class Entry < ActiveRecord::Base
     named_scope type.pluralize.to_sym, :conditions => {:entry_type => type}
   end
 
+  named_scope :uncategorized, 
+    :conditions => ["uncategorized = :uncategorized and entry_type != :not_entry_type", 
+      {:uncategorized => true, :not_entry_type => 'transfer'}]
+  
+  named_scope :categorized, :conditions => {:uncategorized => false}
+
   named_scope :since, lambda { |date|
     { :conditions => ["posted > ?", date] }
+  }
+
+  # find entries that are dated >= [from] and <= [to].
+  named_scope :between, lambda { |from, to|
+    { :conditions => ["posted BETWEEN ? AND ?", from.to_date, to.to_date] }
   }
 
   validate :sum_of_all_splits_equal_zero
   validate :has_only_one_opposite_signed_split
   validate :has_two_or_more_splits
-  validate :has_no_zero_value_splits
+  #validate :has_no_zero_value_splits
   validate :has_at_least_one_account_type_split
   validates_presence_of :entry_type, :posted
 
   before_validation :cache_entry_type!
+
+  before_save do |entry|
+    entry.uncategorized = true if entry.new_record?
+  end
 
   def posted=(date)
     self[:posted] = date.to_date if date
@@ -79,13 +95,14 @@ class Entry < ActiveRecord::Base
         nonacct.save!
       end
 
-      other_entry.save!
+      self.memo = [memo, other_entry.memo].join(" / ")
+      other_entry.destroy
       save!
     end
   end
 
   def refund?
-    debit_ledger.class == Expense && credit?(Account)
+    debit_ledger.class == Expense && credit?(Account) && !debit_ledger.unknown?
   end
 
   def transfer?
@@ -109,11 +126,11 @@ class Entry < ActiveRecord::Base
   end
 
   def debit_ledger
-    debits.size > 0 && debits.first.ledger
+    debits.present? && debits.first.ledger
   end
 
   def credit_ledger
-    credits.size > 0 && credits.first.ledger
+    credits.present? && credits.first.ledger
   end
 
   def debit?(type)
@@ -122,6 +139,12 @@ class Entry < ActiveRecord::Base
 
   def credit?(type)
     credit_ledger.is_a? type
+  end
+
+  def inspect
+    values = [self.class.name, id, entry_type, posted, memo, splits.map(&:inspect).join(",")]
+
+    "#<%s id: %s, entry_type: %s, posted: %s, memo: %s, splits: [%s]>" % values
   end
 
   # Returns the ledgers for this entry that are on the 'remote' side

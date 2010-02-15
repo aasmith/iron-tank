@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: keychains
 #
@@ -8,11 +8,14 @@
 #  crypted_details :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  description     :string(255)
 #
 
 andy_yodlee:
   user: andy
-  crypted_details: 
+  crypted_details: "yuYI/njItPu05PTtFuOsdyByRj/QzJs6ke+jht1704c=\n"
+  description: foo
 andy_foo_bank:
   user: andy
-  crypted_details: 
+  crypted_details:
+  description: empty 

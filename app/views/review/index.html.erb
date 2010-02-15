@@ -1,0 +1,49 @@
+<style>
+  .box.review {
+    width: 578px;
+    min-height: 65px;
+    margin: 0 20px 20px 0;
+  }
+
+  #suggestion button { width: 414px; font-size: 2em}
+</style>
+
+<div class="box entry review" id="entry">
+  <%= javascript_tag(remote_function :url => {:action => :next}) %>
+</div>
+
+<% form_remote_tag :url => { :action => :update } do %>
+  <%= hidden_field_tag :entry_id %>
+  <%= hidden_field_tag :ledger_id %>
+
+  <div id="suggestion"><button><span>Loading</span></button></div>
+
+  <% @pairs.each do |pair| %>
+    <div>
+      <% pair.each do |ledger| %>
+        <%= content_tag :button, h(ledger.name), {:name => "ledger_id", :value => ledger.id } %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+  function updateButtonCallbacks() {
+    $('button').click(function(e){ $('#ledger_id').attr('value', this.value) })
+  }
+
+  function fadeEntry() {
+    $('.entry *, #suggestion button span').animate({opacity: 0}, 950, function() {
+      $('.entry').html('<img style="display:block;margin:16px auto;" src="/images/spin.gif">');
+    });
+  }
+
+  function revealEntry() {
+    $('.entry *, #suggestion button span').animate({opacity: 1}, 350)
+  }
+
+  $('form').submit(fadeEntry);
+
+  $(document).ready(revealEntry);
+
+</script>

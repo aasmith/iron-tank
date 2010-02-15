@@ -5,15 +5,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>iron-tank</title>
-    <!--[if IE]><%= javascript_include_tag "excanvas" %><![endif]-->
-    <%= javascript_include_tag :defaults, "jquery-flot" %>
-    <%= stylesheet_link_tag *@stylesheets.unshift("reset", "application") %>
+    <%= javascript_include_tag :defaults %>
+    <%= stylesheet_link_tag *@stylesheets.unshift("reset", "jquery-ui", "application") %>
     <!-- Apply these styles again in a style tag for webkit based browsers.
          Remove these, and plotting fails, or appears skewed. -->
     <%= apply_webkit_hack(@stylesheets) %>
   </head>
 
   <body>
+    <% if flash[:info] %>
+      <div>[info] <%= flash[:info] %></div>
+    <% end %>
+
+    <% if @warnings && controller_name != "review" %>
+      <div id="warning">
+        <h1 class="box action">
+          You have <%= @uncategorized %> transactions to 
+          <%= link_to "review", :controller => :review %>.
+        </h1>
+      </div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

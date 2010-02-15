@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: splits
 #
@@ -24,4 +24,8 @@ class Split < ActiveRecord::Base
     :class_name => "Money", 
     :mapping => %w(amount cents),
     :converter => lambda{|amt| amt.to_money})
+
+  def inspect
+    "#<#{self.class.name} ledger: #{ledger.name}, amount: #{amount.format}>"
+  end
 end
