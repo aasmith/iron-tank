@@ -1,0 +1,7 @@
+<h2>Create / Choose Keychain</h2>
+
+<ul>
+  <% @user.keychains.each do |keychain| %>
+    <li><%= link_to keychain.description, {:id => keychain.id}, :method => :post %></li>
+  <% end %>
+</ul>

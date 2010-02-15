@@ -1,93 +1,139 @@
-<div id="main">
-  <div class="category box">
-    <div class="chart"><div id="gg" class="plot"></div></div>
-    <div class="spend">$832</div>
-    <div class="diff over">$132</div>
-    <div class="title">Insurance</div>
-    <div class="break"></div>
-    <div class="expanded">
-      <hr />
-      <p>Average line: <a href="">Change to a goal amount</a></p>
-      <hr />
-      <table>
-        <tr>
-          <td>$832</td><td>from Checking</td><td>Tuesday, 4<sup>th</sup></td>
-        </tr>
-        <tr>
-          <td>$832</td><td>from Checking</td><td>Tuesday, 4<sup>th</sup></td>
-        </tr>
-        <tr>
-          <td>$832</td><td>from Checking</td><td>Tuesday, 4<sup>th</sup></td>
-        </tr>
-      </table>
-    </div>
-  </div>
+<style>
+  .current.category, .previous.category, .summary {line-height: 2em; position: relative; float: left; }
+  .current.category .spend { float: right; }
+  .current.category .title { float: left; text-align:left; white-space: nowrap; overflow: hidden; font-size: 1.7em; font-weight: bold; }
 
-  <div id="categories">
-    <% @expenses.each do |expense, splits| %>
-      <div class="category box">
-        <div class="chart">...</div>
-        <div class="spend">
-          <%= splits.balance.format %>
-        </div>
-        <div class="diff unchanged"></div>
-        <div class="title"><%= expense.name %></div>
-        <div class="break"></div>
-        <div class="expanded">
-          <hr />
-          <p>Average line: <a href="">Change to a goal amount</a></p>
-          <hr />
-          <table>
-            <% splits.each do |split| %>
-            <tr>
-              <td><%= split.amount.format %></td>
-              <td>from <%= split.entry.local_ledgers.map(&:name).join(", ") %></td>
-              <td><%= pretty_date(split.entry.posted) %></td>
-            </tr>
-          <% end %>
-          </table>
-        </div>
-      </div>
-    <% end %>
-  
-    <div class="remaining category box">
-      <div class="chart">&nbsp;</div>
-      <div class="spend">$423</div>
-      <div class="diff">&nbsp;</div>
-      <div class="title"><a href="">7 Others</a></div>
-      <div class="break"></div>
-    </div>
-  </div>
+  .current.category { width:250px; cursor:pointer; }
+  .previous.category { width:80px; cursor:pointer; }
 
-</div>
+  .spend { font-size: 2em; font-weight:bold; }
+  .previous .spend { text-align:center; }
 
-<%= render :partial => "side" %>
+  .progress {
+    margin: 12px 5px;
+  }
+
+  .ui-progressbar-value {
+    background: #eee url('/images/progress-under.png') repeat-x 50% 40%;
+  }
+
+  .ui-progressbar {
+    height: 25px;
+    background: #eee url('/images/progress-bg.png') repeat-x 50% 60%;
+  }
+
+  .summary .title { font-size: 1.7em; font-weight:bold; text-align:center;}
+  .summary .spend { font-size: 2.5em; font-weight:bold;text-align:center; padding: 10px 0px; }
+  .summary { margin-left:20px; float:right}
+
+
+  .unselected .title, .unselected .expanded, .unselected .average  { display:none; }
+</style>
+
+<% [@losers,@winners,@others].flatten.each do |locals| %>
+  <%= render :partial => "expense", :locals => locals %>
+<% end %>
 
 <script id="source" language="javascript" type="text/javascript">
-$(function () {
-    var origin = 0;
-    var avg = 638.5; // target line
-    var spend = [[0, 138.05], [1,127.05], [2,137], [3,138.05], [4,127.05], [5,137], [6,842.56], [7,0], [8,0], [9,0], [10,0], [11,842.56]];
 
-    var options = {
-      shadowSize: 0,
-      grid: { borderWidth: 0 },
-      yaxis: {ticks: []},
-      xaxis: {ticks: []}
-    };
-    options['colors'] = jQuery.map(spend, function(e) { return e[1] == 0 ? '#f2f2f2' : (e[1] > avg ? '#BF0C00' : '#7DB700') } );
-    options['colors'].push('#2383C7'); // avg line color
+  $(window).load(function(){
+    $(".progress").each(function(i,e){
+      var a = $(e).data("values").spent
+      var b = $(e).data("values").average
 
-    var plotArray = jQuery.map(spend, function(e) { return {data: [e], bars: { show: true, barWidth: 0.8 }} } );
-    plotArray.push({data: [[0, avg],[spend.length, avg]], lines: { show: true, lineWidth: 0.5 } });
-
-    jQuery.plot($("#gg"), plotArray, options);
-
-    $(window).resize(function(){
-      jQuery.plot($("#gg"), plotArray, options);
+      $(e).progressbar({value:10})
+      $(".ui-progressbar-value", e).animate({width: (b == 0 ? 0 : (a / b) * 100) + "%"})
     });
-});
+  });
 
-$(function(){expandableSections("category");});
 
+function applyOpacity(elements, now) {
+  var brightest = 0.7;
+  elements.each(function(i,e){ $(e).animate({opacity: brightest - (i * 0.15)}, now ? 0 : 'fast') })
+}
+
+function deselect(element, targetWidth) {
+
+  // fade out selected everything inside element, shrink it down to size, and bring back just the spend element.
+  
+  $(".title, .average, .expanded", element).hide();
+  $(".spend", element).animate({opacity: 0}, 250)
+
+  element.animate({opacity: 0.5, width: targetWidth}, {queue: true, complete: function(){ 
+
+    element.removeClass("selected")
+    element.addClass("unselected")
+
+    // todo: remove these 2 calls
+    element.removeClass("current")
+    element.addClass("previous")
+
+    $(".spend", element).animate({opacity: 1})
+  }});
+}
+
+function select(element, targetWidth) {
+
+  // fade out everything inside element, widen it, and bring black all elements.
+  $(".spend", element).animate({opacity: 0})
+
+  element.animate({width: targetWidth}, {queue: true, complete: function(){ 
+
+    $(".average", this).animate({height: 'show'}, {duration: 250, easing: 'easeInOutExpo'})
+    element.removeClass("unselected")
+    element.addClass("selected")
+
+    // todo: remove these 2 calls
+    element.removeClass("previous")
+    element.addClass("current")
+
+    $(".title, .break", element).show();
+
+    $("*", element).animate({opacity: 1})
+    element.animate({opacity: 1})
+  }});
+}
+
+
+$(function(){
+  $(".category").click(
+    function(){
+      if ($(this).hasClass("selected")) {
+        // expand/shrink more info
+        $(".expanded", this).animate({height: 'toggle'}, 250, 'easeInOutExpo')
+      }
+      else {
+        // select this, pack away other selected
+  
+        // determine the index of this element in its row
+        var index = $(this).prevAll(".category").size() + 1;
+
+        // expand the element at the same index in every row
+        $('.row .category:nth-child('+index+')').each(function(i,e){
+
+          var row = $(e).parents(".row");
+          var currentSelected = $(".selected", row);
+          var newSelected = $(e)
+  
+          var small = newSelected.width()
+          var big = currentSelected.width()
+  
+          deselect(currentSelected, small)
+          select(newSelected, big)
+  
+          // set new opacities
+          applyOpacity(newSelected.nextAll(".category")) 
+          applyOpacity(newSelected.prevAll(".category")) 
+        });
+      }
+    }
+  );
+}); // end onload handler
+
+$(function() {
+  $(".selected").each(function(i,e){ 
+    applyOpacity($(e).nextAll(".category"), true) 
+    applyOpacity($(e).prevAll(".category"), true) 
+  })
+})
 </script>

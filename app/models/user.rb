@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: users
 #
@@ -45,5 +45,9 @@ class User < ActiveRecord::Base
   # Finds or creates a ledger of the given name (titleized).
   def ledgers_by_alias!(name)
     ledgers_by_alias(name) || expenses.create!(:name => name.titleize)
+  end
+
+  def unknown_ledger
+    expenses.find_or_create_by_name "Unknown"
   end
 end

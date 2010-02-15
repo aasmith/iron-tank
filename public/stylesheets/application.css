@@ -9,6 +9,10 @@ h1,h2,h3 {
   padding: 10px 0px;
 }
 
+h1 { 
+  font-size: 1.6em;
+}
+
 h2 {
   font-size: 1.5em;
 }
@@ -41,23 +45,33 @@ body { margin: 40px 40px; width: 90%;} /* !wk-hack */
 #main { float:left; width: 67%;} /* !wk-hack */
 #side { float:right; width: 29%; } /* !wk-hack */
 
+#warning { text-align: center }
+
 .box {
   background-color: #f2f2f2;
-  border: 2pt solid #d9d9d9;
-  -moz-border-radius:3mm;
-  -webkit-border-radius: 3mm;
-  border-radius:3mm;
-
-  padding:15px;
+  background: #eee url('/images/box.gif') bottom left repeat-x;
+  border: 1px solid #aeaeae;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px 15px 15px 15px;
   margin:10px 5px;
+  position: relative;
+}
+
+.box .money {
+  position:absolute; top:0.7em; 
+  right:15px; 
+  font-size:1.5em;
 }
 
 .action {
+  background: none;
   background-color:#EDCDCB;
-  border-color:#C05046;
-  font-size: 1.1em;
+  border: 2px solid #C05046;
+  /* font-size: 1.1em;
   font-weight: bold;
-  line-height: 1.3em;
+  line-height: 1.3em; */
 }
 
 .info {
@@ -68,8 +82,8 @@ body { margin: 40px 40px; width: 90%;} /* !wk-hack */
 }
 
 .transfer{}
-.expense{font-weight:bold;color:#BF0C00;}
-.income{font-weight:bold;color:#7DB700;}
+.expense, .more {font-weight:bold;color: #750900 /*#BF0C00*/;} /* trying new red */
+.income, .less {font-weight:bold;color: #5C7C11 /*#7DB700*/;}  /* and green hues */
 .refund{font-weight:bold;color:#7DB700;}
 
 .over { color: #9D3D35; }
@@ -81,4 +95,14 @@ body { margin: 40px 40px; width: 90%;} /* !wk-hack */
 .unchanged { color: #909090; }
 .unchanged:after { content: "No change"}
 
+.low-importance { color: #c9c9c9; }
+
+button {
+  width: 200px;
+  margin:5px;
+  padding: 10px;
+  font-family: Calibri, sans-serif;
+  font-size: 16pt;
+  font-weight: bold;
+}
 

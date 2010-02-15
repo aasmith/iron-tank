@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: ledgers
 #
@@ -39,9 +39,13 @@ class Ledger < ActiveRecord::Base
   #   named_scope t.to_sym, :conditions => {:type => t.classify}
   # end
 
-  named_scope :entries_since, lambda { |date|
+  named_scope :with_entries_since, lambda { |date|
     { :conditions => ["entries.posted > ? ", date], 
       :include => :entries }
+  }
+
+  named_scope :excluding, lambda { |*ledgers|
+    { :conditions => ["ledgers.id not in (?)", ledgers]}
   }
 
   named_scope :credits, 
@@ -56,6 +60,10 @@ class Ledger < ActiveRecord::Base
 
   def balance
     splits.balance
+  end
+
+  def unknown?
+    name == "Unknown"
   end
 end
 

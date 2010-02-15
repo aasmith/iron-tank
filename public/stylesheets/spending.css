@@ -7,9 +7,9 @@
 
 .category {line-height: 2em;}
 .category .chart { width: 30%; float: left; } /* !wk-hack */
-.category .spend { width: 20%; float: left; font-size: 1em; font-weight:bold;}
+/*.category .spend { width: 20%; float: left; font-size: 1em; font-weight:bold;}*/
 .category .diff  { width: 20%; float: left; font-size: 1em; font-weight:bold;}
-.category .title { width: 30%; float: left; white-space: nowrap; overflow: hidden; font-size: 1.7em; font-weight: bold; text-align:right;}
+/*.category .title { width: 30%; float: left; white-space: nowrap; overflow: hidden; font-size: 1.7em; font-weight: bold; text-align:right;}*/
 
 .category .chart .plot { height: 40px; padding-right: 16px; } /* !wk-hack */
 .category .expanded { font-size: 0.8em; }

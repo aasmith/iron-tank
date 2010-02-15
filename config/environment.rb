@@ -25,8 +25,10 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "money"
-  config.gem "aasmith-yodlee", :lib => "yodlee", :source => "http://gems.github.com"
+  config.gem "money", :version => ">= 2.1.5"
+  config.gem "yodlee", :source => "http://gemcutter.org"
+  config.gem "bishop", :lib => "bayes/bishop"
+  config.gem "encryptor"
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -50,7 +52,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_iron-tank_session',
+    :session_key => '_iron-tank_session_ms',
     :secret      => '3168f80658f7f7191c54b66b61684835b94a3b415427e0eadeb46cdbce5759368cbb5fc6bc59b9e2a260dbb64f8354ca957bfd18ecb9d51f41ff9b5cdd1902af'
   }
 
@@ -58,6 +60,7 @@ Rails::Initializer.run do |config|
   # which shouldn't be used to store highly confidential information
   # (create the session table with "rake db:sessions:create")
   # config.action_controller.session_store = :active_record_store
+  config.action_controller.session_store = :mem_cache_store
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -72,4 +75,9 @@ end
 require 'vendor/ofx-parser/lib/ofx-parser'
 require 'lib/core_ext'
 
-Sentry::SymmetricSentry.default_algorithm = 'aes-256-cbc'
+# Add these explicitly so rcov can find them.
+require 'lib/loader'
+require 'lib/fetcher'
+require 'lib/converter'
+
+Huberry::Encryptor.default_options[:algorithm] = 'aes-256-cbc'

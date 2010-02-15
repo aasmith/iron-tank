@@ -1,0 +1,7 @@
+  <h2 style="opacity:0">
+    <span class="memo"><%= h(@entry.memo) %></span>
+    <span class="money <%= @entry.entry_type %>"><%= summarize_entry_amount @entry %></span>
+  </h2>
+  <div style="opacity:0">
+    <%= @entry.local_ledgers.map(&:name).join(",") %> on <%= pretty_date @entry.posted %>
+  </div>

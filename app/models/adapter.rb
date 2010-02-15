@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: adapters
 #
@@ -19,6 +19,10 @@ class Adapter < ActiveRecord::Base
     define_method :"#{method}_class" do
       "#{method}/#{attributes[method]}".camelize.constantize
     end
+  end
+
+  def list(credentials)
+    fetcher_class.new(credentials).list
   end
 
 end

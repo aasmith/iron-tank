@@ -1,0 +1,8 @@
+<h2>Choose an Account to Add</h2>
+
+<ul>
+  <% @accounts.each do |account| %>
+    <li><%= link_to [account.name, account.institute_name].join("; "), 
+      {:id => account.id}, :method => :post %></li>
+  <% end %>
+</ul>

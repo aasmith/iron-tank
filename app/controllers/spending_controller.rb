@@ -1,63 +1,48 @@
 class SpendingController < ApplicationController
 
-  before_filter :init_day_params, :only => [:category, :day]
-  helper_method :weekly?, :daily?
-
   def category
-    @expenses = 
-      @user.expenses.entries_since(@start_date).collect do |expense|
-        [expense, expense.splits.since(@start_date)]
-      end
-  end
+    time_ranges = 4.downto(0).map{|n| [n.months.ago.beginning_of_month, n.months.ago.end_of_month]}
 
-  def day
-    @daily_entries = 
-      @user.entries.since(@start_date).group_by do |e|
-        weekly? ? e.posted.beginning_of_week : e.posted
-      end
-  end
+    expenses = @user.expenses.excluding(@user.unknown_ledger).with_entries_since(2.months.ago).map do |expense|
 
-  def edit_split_ledgers
-    entry = @user.entries.find(params[:entry_id])
+      totals  = time_ranges.map { |from, to| Money.new(expense.entries.between(from, to).sum(:amount).to_i) }
+      entries = time_ranges.map { |from, to| expense.entries.between(from, to) }
 
-    Entry.transaction do
-      params[:split].each do |split_id, values|
-        split = entry.splits.find(split_id)
-        split.ledger = @user.ledgers.find(values[:ledger_id])
-        split.save!
-      end
+      current_entries = entries.last
+      current_total = totals.last
 
-      entry.save!
+      # dont include the current period in the average. it is probably lower
+      # because we are not all the way through it.
+      average = totals[0,totals.size-1].reduce(:+) / (totals.size - 1)
+      
+      winner = current_total <= average 
+      deviation = (current_total.floor - average.floor)
+
+      {
+        :expense => expense, 
+        :totals => totals, 
+        :entries => entries,
+        :current_total => current_total,
+        :average => average, 
+        :winner => winner, 
+        :deviation => deviation,
+        :current_entries => current_entries
+      }
     end
 
-    render(:update) do |page|
-      page["entry-#{entry.id}"].replace :partial => "entry", :object => entry
-      page["entry-edit#{entry.id}"].replace :partial => "entry", :locals => {:entry => entry}
-      page["entry-#{entry.id}"].visual_effect :highlight
-      page.call 'initLedgerSelectors'
+    @winners = []
+    @losers = [] 
+    @others = []
+
+    expenses.sort_by{ |h| h[:deviation].cents.abs }.reverse.each do |h|
+      if !h[:winner] && !h[:current_total].zero?
+        @losers << h
+      elsif h[:winner] && !h[:current_total].zero?
+        @winners << h
+      else
+        @others << h
+      end
     end
-  end
-
-  protected
-
-  def weekly?
-    @period == :weekly
-  end
-
-  def daily?
-    !weekly?
-  end
-
-  private
-
-  def init_day_params
-    @current_days = params[:days].to_i
-    @start_date = @current_days.days.ago
-
-    @days = [7, 30, 60, 180]
-    (@days << @current_days).sort! unless @days.include?(@current_days)
-    
-    @period = @current_days > 14 ? :weekly : :daily
   end
 
 end

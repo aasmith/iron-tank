@@ -1,13 +1,14 @@
-class Fixnum
+class Numeric
   def oppose
     -self
   end
 end
 
 class Money
-  alias old_format format
-  def format(*rules)
-    (r = old_format(rules)) == "free" ? "$0" : r.commify
+  PENNIES = 100
+
+  def floor
+    self.class.new(cents - (cents % PENNIES))
   end
 end
 
@@ -24,5 +25,11 @@ end
 class String
   def commify
     reverse.gsub(/(\d\d\d)(?=\d)(?!\d*\.)/, '\1,').reverse
+  end
+end
+
+module Enumerable
+  def every
+    each_with_index { |e,i| yield(i.zero?, i == size-1, *e) }
   end
 end

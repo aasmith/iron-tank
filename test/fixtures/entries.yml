@@ -1,15 +1,16 @@
 # == Schema Information
-# Schema version: 20090227093920
+# Schema version: 20091019043039
 #
 # Table name: entries
 #
-#  id         :integer         not null, primary key
-#  user_id    :integer
-#  entry_type :string(255)
-#  posted     :date
-#  memo       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id            :integer         not null, primary key
+#  user_id       :integer
+#  entry_type    :string(255)
+#  posted        :date
+#  memo          :string(255)
+#  uncategorized :boolean
+#  created_at    :datetime
+#  updated_at    :datetime
 #
 
 older_weekly_grocery:

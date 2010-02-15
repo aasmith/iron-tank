@@ -5,7 +5,7 @@ class KeychainTest < ActiveSupport::TestCase
     d = {:secret => "foo", :secret2 => "bar"}
     key = "somekey"
 
-    k = Keychain.first
+    k = Keychain.new
     assert_nil k.crypted_details
     assert_nil k.details("anykey")
 
@@ -18,9 +18,9 @@ class KeychainTest < ActiveSupport::TestCase
     k.save!
     k.reload
 
-    assert_equal Sentry::SymmetricSentry.encrypt_to_base64(Marshal.dump(d), key), k.crypted_details
+    assert_equal Base64.encode64(Huberry::Encryptor.encrypt(:value => Marshal.dump(d), :key => key)), k.crypted_details
 
-    assert_raise(OpenSSL::CipherError) { k.details("wrongkey") }
+    assert_raise(OpenSSL::Cipher::CipherError) { k.details("wrongkey") }
 
     assert_equal d, k.details(key)
 

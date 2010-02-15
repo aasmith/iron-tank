@@ -9,3 +9,4 @@ coverage
 tags
 Session.vim
 doc/
+*.core
