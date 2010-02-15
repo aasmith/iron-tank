@@ -38,18 +38,18 @@ class Keychain < ActiveRecord::Base
   def set_details(details, key)
     raise "No key supplied" unless key
 
-    enc = Sentry::SymmetricSentry.encrypt_to_base64(
-      Marshal.dump(details), key)
+    enc = Huberry::Encryptor.encrypt(:value => Marshal.dump(details), :key => key)
 
-    self.crypted_details = enc
+    self.crypted_details = Base64.encode64(enc)
   end
 
   def details(key)
     raise "No key supplied" unless key
     return nil unless crypted_details
 
-    Marshal.load(Sentry::SymmetricSentry.decrypt_from_base64(
-      crypted_details, key))
+    enc = Base64.decode64(crypted_details)
+
+    Marshal.load(Huberry::Encryptor.decrypt(:value => enc, :key => key))
   end
 
 end

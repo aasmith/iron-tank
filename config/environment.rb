@@ -25,8 +25,10 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem "money"
-  config.gem "aasmith-yodlee", :lib => "yodlee", :source => "http://gems.github.com"
+  config.gem "money", :version => ">= 2.1.5"
+  config.gem "yodlee", :source => "http://gemcutter.org"
+  config.gem "bishop", :lib => "bayes/bishop"
+  config.gem "encryptor"
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -77,4 +79,4 @@ require 'lib/loader'
 require 'lib/fetcher'
 require 'lib/converter'
 
-Sentry::SymmetricSentry.default_algorithm = 'aes-256-cbc'
+Huberry::Encryptor.default_options[:algorithm] = 'aes-256-cbc'
